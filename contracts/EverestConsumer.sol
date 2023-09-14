@@ -124,11 +124,7 @@ contract EverestConsumer is IEverestConsumer, ChainlinkClient, Ownable, CCIPSend
         // Encoding the data: Using the `statusToString` function
         string memory statusString = statusToString(status);
 
-        // destinationChainSelector for the Fuji chain.
-        uint64 destinationChainSelector = 14767482510784806043;
-        address _ccidReceiver = ccidReceiver;
-
-        send(_ccidReceiver, statusString, destinationChainSelector);
+        send(ccidReceiver, statusString, ccidDestinationSelector);
     }
 
     function cancelRequest(bytes32 _requestId) external override ifRequestExists(_requestId) {
