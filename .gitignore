@@ -1,0 +1,14 @@
+node_modules
+.env
+.env.enc
+coverage
+coverage.json
+
+# Hardhat files
+cache
+/artifacts
+
+notes.txt
+notes2.txt
+
+contracts/CCIDSender.sol
