@@ -17,7 +17,7 @@ _The [Everest Identity Oracle](https://goerli.etherscan.io/address/0xB9756312523
 
 ## Overview
 
-`EverestConsumer.sol` inherits the functionality from `CCIPSender_Unsafe.sol` to send the KYC status of a queried address in the form of a string across chains to `CCIDReceiver.sol`.
+`EverestConsumer.sol` inherits the functionality from `CCIPSender_Unsafe.sol` to send the KYC status of a queried address in the form of a string across chains to `CCIDReceiver.sol` which inherits functionality from `CCIPReceiver_Unsafe.sol`.
 
 The three possible results are:
 
