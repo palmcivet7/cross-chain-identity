@@ -38,7 +38,7 @@ When this project is able to be deployed, these are the steps that must be follo
   - `_jobId` - string of JobID found in [Everest docs](https://static-assets.everest.org/web/images/HowToSetupAndUseTheEverestChainlinkService.pdf#page=8)
   - `_oraclePayment` - uint256 amount of Chainlink (LINK) to pay
   - `_signUpURL` - string of [Everest Wallet URL](https://wallet.everest.org/)
-- Chainlink (LINK) token is sent to the deployed EverestConsumer/CCIDSender contract
+- Chainlink (LINK) token is approved for spending by the deployed EverestConsumer/CCIDSender contract
 - `CCIDReceiver.sol` is deployed to receiving blockchain with the following constructor arguments:
   - `_router` - address of [CCIP Router](https://docs.chain.link/ccip/supported-networks)
 - `setCcidReceiver()` is called on first contract, passing address of receiver contract as parameter
