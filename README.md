@@ -57,6 +57,7 @@ _Even though this project is built in Foundry, Chainlink CCIP contracts are inst
 - takes same constructor arguments as EverestConsumer, as well as an address for `router`
 - has the following storage variables:
   - address `router`
+  - address `link`
   - address `ccidReceiver`
   - uint64 `ccidDestinationSelector`
 - has the following setter functions:
