@@ -68,7 +68,7 @@ _Even though this project is built in Foundry, Chainlink CCIP contracts are inst
 
 ## CCIDReceiver.sol
 
-- imports CCIPReceiver
+- imports CCIPReceiver and Client
 - takes same constructor argument as CCIPReceiver to set `router` address
 - overrides `_ccipReceive()` to receive and decode message to get identity status as a string
 - emits an event with the received identity status
