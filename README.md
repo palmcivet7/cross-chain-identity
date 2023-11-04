@@ -14,6 +14,7 @@ _The [Everest Identity Oracle](https://goerli.etherscan.io/address/0xB9756312523
   - [CCIDSender.sol](#ccidsendersol)
   - [CCIDReceiver.sol](#ccidreceiversol)
   - [Development Resources](#development-resources)
+  - [Additional Comments on EverestConsumer](#additional-comments-on-everestconsumer)
   - [License](#license)
 
 ## Overview
@@ -39,6 +40,7 @@ When this project is able to be deployed, these are the steps that must be follo
   - `_jobId` - string of JobID found in [Everest docs](https://static-assets.everest.org/web/images/HowToSetupAndUseTheEverestChainlinkService.pdf#page=8)
   - `_oraclePayment` - uint256 amount of Chainlink (LINK) to pay
   - `_signUpURL` - string of [Everest Wallet URL](https://wallet.everest.org/)
+- approve spending LINK for `CCIDSender` address
 - `CCIDReceiver.sol` is deployed to receiving blockchain with the following constructor arguments:
   - `_router` - address of [CCIP Router](https://docs.chain.link/ccip/supported-networks)
 - `setCcidReceiver()` is called on first contract, passing address of receiver contract as parameter
@@ -81,6 +83,10 @@ The following resources were used for developing CCID:
 - [smartcontractkit - ccip-starter-kit-hardhat](https://github.com/smartcontractkit/ccip-starter-kit-hardhat)
 - [EverID - everest-chainlink-consumer](https://github.com/EverID/everest-chainlink-consumer)
 - [palmcivet7 - hardhat-everest-chainlink-consumer](https://github.com/palmcivet7/hardhat-everest-chainlink-consumer)
+
+## Additional Comments on EverestConsumer
+
+This project inherits [my own fork](https://github.com/palmcivet7/hardhat-everest-chainlink-consumer) of the EverestConsumer which changed the visibility of the `fulfill()` and `statusToString()` functions from `external` to `public` to allow CCIDSender to call them. The `fulfill()` was also made `virtual`.
 
 ## License
 

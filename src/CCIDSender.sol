@@ -7,8 +7,9 @@ import {IRouterClient} from "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/
 import {Client} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-contract CCIDSender is EverestConsumer, Ownable {
+contract CCIDSender is Ownable, EverestConsumer {
     address public router;
+    address public link;
     address public ccidReceiver;
     uint64 public ccidDestinationSelector;
 
@@ -19,18 +20,13 @@ contract CCIDSender is EverestConsumer, Ownable {
         string memory _jobId,
         uint256 _oraclePayment,
         string memory _signUpURL
-    ) EverestConsumer(_link, _oracle, _jobId, _oraclePayment, _signUpURL) Ownable(msg.sender) {
+    ) EverestConsumer(_link, _oracle, _jobId, _oraclePayment, _signUpURL) {
         router = _router;
-        setChainlinkToken(_link);
-        setChainlinkOracle(_oracle);
-        jobId = stringToBytes32(_jobId);
-        oraclePayment = _oraclePayment;
-        signUpURL = _signUpURL;
-        LinkTokenInterface(link).approve(router, type(uint256).max);
+        link = _link;
     }
 
     function fulfill(bytes32 _requestId, Status _status, uint40 _kycTimestamp)
-        external
+        public
         override
         recordChainlinkFulfillment(_requestId)
     {
@@ -47,7 +43,7 @@ contract CCIDSender is EverestConsumer, Ownable {
             extraArgs: "",
             feeToken: link
         });
-        IRouterClient(router).ccipSend(destinationChainSelector, message);
+        IRouterClient(router).ccipSend(ccidDestinationSelector, message);
     }
 
     function setCcidReceiver(address _ccidReceiver) public onlyOwner {
