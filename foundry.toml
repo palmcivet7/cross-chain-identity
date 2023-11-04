@@ -5,6 +5,7 @@ libs = ["node_modules", "lib"]
 remappings = [
     "@chainlink/contracts-ccip=node_modules/@chainlink/contracts-ccip",
     "@everest/contracts=lib/hardhat-everest-chainlink-consumer/contracts",
+    "@chainlink/contracts=lib/chainlink/contracts",
 ]
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
