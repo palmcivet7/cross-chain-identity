@@ -34,7 +34,7 @@ contract CCIDSender is EverestConsumer, Ownable {
         override
         recordChainlinkFulfillment(_requestId)
     {
-        super.fulfill(_requestId, _status, _kycTimestamp)
+        super.fulfill(_requestId, _status, _kycTimestamp);
         sendKycStatusToCcidReceiver(_status);
     }
 
