@@ -34,8 +34,8 @@ contract CCIDSender is Ownable, EverestConsumer {
         sendKycStatusToCcidReceiver(_status);
     }
 
-    function sendKycStatusToCcidReceiver(Status status) internal {
-        string memory statusString = statusToString(status);
+    function sendKycStatusToCcidReceiver(Status _status) internal {
+        string memory statusString = statusToString(_status);
         Client.EVM2AnyMessage memory message = Client.EVM2AnyMessage({
             receiver: abi.encode(ccidReceiver),
             data: abi.encode(statusString),
