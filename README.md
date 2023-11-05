@@ -89,6 +89,8 @@ The following resources were used for developing CCID:
 
 This project inherits [my own fork](https://github.com/palmcivet7/hardhat-everest-chainlink-consumer) of the EverestConsumer which changed the visibility of the `fulfill()` and `statusToString()` functions from `external` to `public` to allow CCIDSender to call them. The `fulfill()` was also made `virtual`.
 
+Optionally `fulfill()` in EverestConsumer could have remained `external` with `fulfill()` in CCIDSender copy and pasting all of the logic instead of using `super.fulfill()`.
+
 ## License
 
 This project is licensed under the [MIT License](https://opensource.org/license/mit/).
