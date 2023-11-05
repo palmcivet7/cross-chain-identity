@@ -48,9 +48,6 @@ When this project is able to be deployed, these are the steps that must be follo
 
 Now when a request is made to the EverestConsumer/CCIDSender contract and fulfilled by the oracle, it will send the KYC status of the queried address to the CCIDReceiver contract on the other chain.
 
-**_Note:_**
-_Even though this project is built in Foundry, Chainlink CCIP contracts are installed via npm into node_modules._
-
 ## CCIDSender.sol
 
 - imports EverestConsumer, IRouterClient, Client, Ownable
