@@ -7,3 +7,6 @@
 [submodule "lib/hardhat-everest-chainlink-consumer"]
 	path = lib/hardhat-everest-chainlink-consumer
 	url = https://github.com/palmcivet7/hardhat-everest-chainlink-consumer
+[submodule "lib/ccip"]
+	path = lib/ccip
+	url = https://github.com/smartcontractkit/ccip
