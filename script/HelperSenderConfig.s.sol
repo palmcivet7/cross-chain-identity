@@ -7,6 +7,7 @@ import {Router} from "@chainlink/contracts/src/v0.8/ccip/Router.sol";
 import {MockARM} from "@chainlink/contracts/src/v0.8/ccip/test/mocks/MockARM.sol";
 import {WETH9} from "@chainlink/contracts/src/v0.8/ccip/test/WETH9.sol";
 import {MockLinkToken} from "@chainlink/contracts/src/v0.8/mocks/MockLinkToken.sol";
+import {Operator} from "../test/operator/Operator.sol";
 // import {Operator} from "@chainlink/contracts/src/v0.8/operatorforwarder/dev/Operator.sol";
 
 contract HelperSenderConfig is Script {
@@ -76,13 +77,13 @@ contract HelperSenderConfig is Script {
         MockARM mockArm = new MockARM();
         Router router = new Router(address(weth9), address(mockArm));
         MockLinkToken mockLink = new MockLinkToken();
-        // Operator operator = new Operator(address(mockLink), msg.sender);
+        Operator operator = new Operator(address(mockLink), msg.sender);
         vm.stopBroadcast();
 
         return NetworkConfig({
             router: address(router),
             link: address(mockLink),
-            oracle: address(0), // should be operator
+            oracle: address(operator), // should be operator
             jobId: "14f849816fac426abda2992cbf47d2cd", // https://static-assets.everest.org/web/images/HowToSetupAndUseTheEverestChainlinkService.pdf#page=8
             oraclePayment: 100000000000000000, // 0.1 LINK
             signUpUrl: "wallet.everest.org",
