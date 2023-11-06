@@ -84,9 +84,7 @@ The following resources were used for developing CCID:
 
 ## Additional Comments on EverestConsumer
 
-This project inherits [my own fork](https://github.com/palmcivet7/hardhat-everest-chainlink-consumer) of the EverestConsumer which changed the visibility of the `fulfill()` and `statusToString()` functions from `external` to `public` to allow CCIDSender to call them. The `fulfill()` was also made `virtual`.
-
-Optionally `fulfill()` in EverestConsumer could have remained `external` with `fulfill()` in CCIDSender copy and pasting all of the logic instead of using `super.fulfill()`.
+This project inherits [my own fork](https://github.com/palmcivet7/hardhat-everest-chainlink-consumer) of the EverestConsumer which changed the visibility of the `statusToString()` function from `external` to `public` to allow CCIDSender to call them. The `fulfill()` was also made `virtual`, and the `_requests` mapping was changed from `private` to `internal`.
 
 ## License
 
