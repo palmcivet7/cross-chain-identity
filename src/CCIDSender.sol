@@ -9,6 +9,9 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {LinkTokenInterface} from "@chainlink-brownie-contracts/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 
 contract CCIDSender is Ownable, EverestConsumer {
+    error CCIDSender__KycTimestampShouldNotBeZeroForKycUser();
+    error CCIDSender__KycTimestampShouldBeZeroForNonKycUser();
+
     address public router;
     address public link;
     address public ccidReceiver;
@@ -28,11 +31,28 @@ contract CCIDSender is Ownable, EverestConsumer {
     }
 
     function fulfill(bytes32 _requestId, Status _status, uint40 _kycTimestamp)
-        public
+        external
         override
         recordChainlinkFulfillment(_requestId)
     {
-        super.fulfill(_requestId, _status, _kycTimestamp);
+        if (_status == Status.KYCUser) {
+            if (_kycTimestamp == 0) {
+                revert CCIDSender__KycTimestampShouldNotBeZeroForKycUser();
+            }
+        } else {
+            if (_kycTimestamp != 0) {
+                revert CCIDSender__KycTimestampShouldBeZeroForNonKycUser();
+            }
+        }
+
+        Request storage request = _requests[_requestId];
+        request.kycTimestamp = _kycTimestamp;
+        request.isFulfilled = true;
+        request.isHumanAndUnique = _status != Status.NotFound;
+        request.isKYCUser = _status == Status.KYCUser;
+        latestFulfilledRequestId[request.revealee] = _requestId;
+
+        emit Fulfilled(_requestId, request.revealer, request.revealee, _status, _kycTimestamp);
         sendKycStatusToCcidReceiver(_status);
     }
 
