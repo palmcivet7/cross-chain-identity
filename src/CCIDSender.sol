@@ -6,6 +6,7 @@ import {EverestConsumer} from "@everest/contracts/EverestConsumer.sol";
 import {IRouterClient} from "@chainlink/contracts/src/v0.8/ccip/interfaces/IRouterClient.sol";
 import {Client} from "@chainlink/contracts/src/v0.8/ccip/libraries/Client.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {LinkTokenInterface} from "@chainlink-brownie-contracts/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 
 contract CCIDSender is Ownable, EverestConsumer {
     address public router;
@@ -23,12 +24,11 @@ contract CCIDSender is Ownable, EverestConsumer {
     ) EverestConsumer(_link, _oracle, _jobId, _oraclePayment, _signUpURL) {
         router = _router;
         link = _link;
+        LinkTokenInterface(link).approve(router, type(uint256).max);
     }
 
-    function fulfill(bytes32 _requestId, Status _status, uint40 _kycTimestamp)
-        public
-        override
-        recordChainlinkFulfillment(_requestId)
+    function fulfill(bytes32 _requestId, Status _status, uint40 _kycTimestamp) public override 
+    // recordChainlinkFulfillment(_requestId)
     {
         super.fulfill(_requestId, _status, _kycTimestamp);
         sendKycStatusToCcidReceiver(_status);
