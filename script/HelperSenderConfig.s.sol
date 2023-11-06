@@ -7,8 +7,7 @@ import {Router} from "@chainlink/contracts/src/v0.8/ccip/Router.sol";
 import {MockARM} from "@chainlink/contracts/src/v0.8/ccip/test/mocks/MockARM.sol";
 import {WETH9} from "@chainlink/contracts/src/v0.8/ccip/test/WETH9.sol";
 import {LinkToken} from "../test/mocks/LinkToken.sol";
-import {Operator} from "../test/operator/Operator.sol";
-// import {Operator} from "@chainlink/contracts/src/v0.8/operatorforwarder/dev/Operator.sol";
+import {Operator} from "../test/mocks/operator/Operator.sol";
 
 contract HelperSenderConfig is Script {
     struct NetworkConfig {
