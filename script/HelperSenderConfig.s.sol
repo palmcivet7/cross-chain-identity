@@ -6,7 +6,7 @@ import {Script} from "forge-std/Script.sol";
 import {Router} from "@chainlink/contracts/src/v0.8/ccip/Router.sol";
 import {MockARM} from "@chainlink/contracts/src/v0.8/ccip/test/mocks/MockARM.sol";
 import {WETH9} from "@chainlink/contracts/src/v0.8/ccip/test/WETH9.sol";
-import {MockLinkToken} from "@chainlink/contracts/src/v0.8/mocks/MockLinkToken.sol";
+import {LinkToken} from "../test/mocks/LinkToken.sol";
 import {Operator} from "../test/operator/Operator.sol";
 // import {Operator} from "@chainlink/contracts/src/v0.8/operatorforwarder/dev/Operator.sol";
 
@@ -76,7 +76,7 @@ contract HelperSenderConfig is Script {
         WETH9 weth9 = new WETH9();
         MockARM mockArm = new MockARM();
         Router router = new Router(address(weth9), address(mockArm));
-        MockLinkToken mockLink = new MockLinkToken();
+        LinkToken mockLink = new LinkToken();
         Operator operator = new Operator(address(mockLink), msg.sender);
         vm.stopBroadcast();
 
