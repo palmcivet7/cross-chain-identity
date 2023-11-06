@@ -8,6 +8,8 @@ remappings = [
     # "@chainlink/contracts=lib/chainlink/contracts",
     "@chainlink/contracts=lib/ccip/contracts",
     "@openzeppelin/contracts=lib/openzeppelin-contracts/contracts",
+    "@solmate=lib/solmate/src/",
+    "@chainlink-brownie-contracts=lib/chainlink-brownie-contracts",
 ]
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
