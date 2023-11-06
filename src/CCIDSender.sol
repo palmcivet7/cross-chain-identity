@@ -27,8 +27,10 @@ contract CCIDSender is Ownable, EverestConsumer {
         LinkTokenInterface(link).approve(router, type(uint256).max);
     }
 
-    function fulfill(bytes32 _requestId, Status _status, uint40 _kycTimestamp) public override 
-    // recordChainlinkFulfillment(_requestId)
+    function fulfill(bytes32 _requestId, Status _status, uint40 _kycTimestamp)
+        public
+        override
+        recordChainlinkFulfillment(_requestId)
     {
         super.fulfill(_requestId, _status, _kycTimestamp);
         sendKycStatusToCcidReceiver(_status);
