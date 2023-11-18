@@ -19,7 +19,7 @@ _The [Everest Identity Oracle](https://goerli.etherscan.io/address/0xB9756312523
 
 ## Overview
 
-`CCIDSender.sol` inherits the functionality from Everest's `EverestConsumer.sol`, and Chainlink's `IRouterClient.sol` and `Client.sol` to send the KYC status of a queried address in the form of a string across chains to `CCIDReceiver.sol` which inherits functionality from `CCIPReceiver.sol`.
+`CCIDSender.sol` inherits the functionality from Everest's `EverestConsumer.sol`, and Chainlink's `IRouterClient.sol` and `Client.sol` to send the KYC status of a queried address in the form of a string across chains to `CCIDReceiver.sol` which inherits functionality from `CCIPReceiver.sol` and `Client.sol`.
 
 The three possible results are:
 
@@ -40,7 +40,7 @@ When this project is able to be deployed, these are the steps that must be follo
   - `_jobId` - string of JobID found in [Everest docs](https://static-assets.everest.org/web/images/HowToSetupAndUseTheEverestChainlinkService.pdf#page=8)
   - `_oraclePayment` - uint256 amount of Chainlink (LINK) to pay
   - `_signUpURL` - string of [Everest Wallet URL](https://wallet.everest.org/)
-- approve spending LINK for `CCIDSender` address
+- send LINK to `CCIDSender` address
 - `CCIDReceiver.sol` is deployed to receiving blockchain with the following constructor arguments:
   - `_router` - address of [CCIP Router](https://docs.chain.link/ccip/supported-networks)
 - `setCcidReceiver()` is called on first contract, passing address of receiver contract as parameter
