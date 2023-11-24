@@ -17,7 +17,7 @@ contract DeployCCIDSender is Script {
             string memory jobId,
             uint256 oraclePayment,
             string memory signUpUrl,
-            uint256 deployerKey
+            uint256 deployerKey,
         ) = config.activeNetworkConfig();
 
         vm.startBroadcast(deployerKey);

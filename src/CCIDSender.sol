@@ -27,7 +27,7 @@ contract CCIDSender is Ownable, EverestConsumer {
     ) EverestConsumer(_link, _oracle, _jobId, _oraclePayment, _signUpURL) {
         router = _router;
         link = _link;
-        LinkTokenInterface(link).approve(router, type(uint256).max);
+        LinkTokenInterface(link).approve(address(router), type(uint256).max);
     }
 
     function fulfill(bytes32 _requestId, Status _status, uint40 _kycTimestamp)

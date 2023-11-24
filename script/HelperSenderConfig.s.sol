@@ -18,6 +18,7 @@ contract HelperSenderConfig is Script {
         uint256 oraclePayment;
         string signUpUrl;
         uint256 deployerKey;
+        address mockArm;
     }
 
     NetworkConfig public activeNetworkConfig;
@@ -42,7 +43,8 @@ contract HelperSenderConfig is Script {
             jobId: "0000000000000000000000000000000", // replace with jobID when available
             oraclePayment: 100000000000000000, // 0.1 LINK
             signUpUrl: "wallet.everest.org",
-            deployerKey: vm.envUint("PRIVATE_KEY")
+            deployerKey: vm.envUint("PRIVATE_KEY"),
+            mockArm: address(0)
         });
     }
 
@@ -54,7 +56,8 @@ contract HelperSenderConfig is Script {
             jobId: "14f849816fac426abda2992cbf47d2cd", // https://static-assets.everest.org/web/images/HowToSetupAndUseTheEverestChainlinkService.pdf#page=8
             oraclePayment: 100000000000000000, // 0.1 LINK
             signUpUrl: "wallet.everest.org",
-            deployerKey: vm.envUint("PRIVATE_KEY")
+            deployerKey: vm.envUint("PRIVATE_KEY"),
+            mockArm: address(0)
         });
     }
 
@@ -66,7 +69,8 @@ contract HelperSenderConfig is Script {
             jobId: "0000000000000000000000000000000", // replace with jobID when available
             oraclePayment: 100000000000000000, // 0.1 LINK
             signUpUrl: "wallet.everest.org",
-            deployerKey: vm.envUint("PRIVATE_KEY")
+            deployerKey: vm.envUint("PRIVATE_KEY"),
+            mockArm: address(0)
         });
     }
 
@@ -82,11 +86,12 @@ contract HelperSenderConfig is Script {
         return NetworkConfig({
             router: address(router),
             link: address(mockLink),
-            oracle: address(operator), // should be operator
+            oracle: address(operator),
             jobId: "14f849816fac426abda2992cbf47d2cd", // https://static-assets.everest.org/web/images/HowToSetupAndUseTheEverestChainlinkService.pdf#page=8
             oraclePayment: 100000000000000000, // 0.1 LINK
             signUpUrl: "wallet.everest.org",
-            deployerKey: vm.envUint("ANVIL_PRIVATE_KEY")
+            deployerKey: vm.envUint("ANVIL_PRIVATE_KEY"),
+            mockArm: address(mockArm)
         });
     }
 }

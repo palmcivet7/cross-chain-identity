@@ -4,6 +4,7 @@
 pragma solidity ^0.8.0;
 
 import "@solmate/tokens/ERC20.sol";
+import {Test, console} from "forge-std/Test.sol";
 
 interface ERC677Receiver {
     function onTokenTransfer(address _sender, uint256 _value, bytes memory _data) external;
@@ -32,6 +33,27 @@ contract LinkToken is ERC20 {
         if (isContract(_to)) {
             contractFallback(_to, _value, _data);
         }
+        return true;
+    }
+
+    function transferFrom(address from, address to, uint256 amount) public override returns (bool) {
+        // Check for sufficient allowance
+        require(allowance[from][msg.sender] >= amount, "Transfer amount exceeds allowance");
+
+        // Check for sufficient balance
+        require(balanceOf[from] >= amount, "Insufficient balance");
+
+        // Deduct the amount from the sender's allowance if it's not max uint256
+        if (allowance[from][msg.sender] != type(uint256).max) {
+            allowance[from][msg.sender] -= amount;
+        }
+
+        // Perform the transfer
+        balanceOf[from] -= amount;
+        balanceOf[to] += amount;
+
+        emit Transfer(from, to, amount);
+
         return true;
     }
 
