@@ -93,8 +93,8 @@ contract CCIDSenderTest is Test, EVM2EVMOnRampSetup {
 
     function testConstructorPropertiesSetCorrectly() public {
         assertNotEq(address(ccidSender), address(0));
-        assertEq(ccidSender.router(), address(router));
-        assertEq(ccidSender.link(), address(link));
+        assertEq(ccidSender.i_router(), address(router));
+        assertEq(ccidSender.i_link(), address(link));
         assertEq(ccidSender.linkAddress(), address(link));
         assertEq(ccidSender.oracleAddress(), address(operator));
         assertEq(ccidSender.jobId(), bytes32(abi.encodePacked(jobId)));
@@ -183,14 +183,14 @@ contract CCIDSenderTest is Test, EVM2EVMOnRampSetup {
     function testSetCcidReceiver() public {
         vm.startPrank(anvilAccount);
         ccidSender.setCcidReceiver(ccidReceiver);
-        assertEq(ccidSender.ccidReceiver(), ccidReceiver);
+        assertEq(ccidSender.s_ccidReceiver(), ccidReceiver);
         vm.stopPrank();
     }
 
     function testSetCcidDestinationSelector() public {
         vm.startPrank(anvilAccount);
         ccidSender.setCcidDestinationSelector(ccidDestinationSelector);
-        assertEq(ccidSender.ccidDestinationSelector(), ccidDestinationSelector);
+        assertEq(ccidSender.s_ccidDestinationSelector(), ccidDestinationSelector);
         vm.stopPrank();
     }
 }

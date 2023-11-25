@@ -12,10 +12,10 @@ contract CCIDSender is Ownable, EverestConsumer {
     error CCIDSender__KycTimestampShouldNotBeZeroForKycUser();
     error CCIDSender__KycTimestampShouldBeZeroForNonKycUser();
 
-    address public immutable router;
-    address public immutable link;
-    address public ccidReceiver;
-    uint64 public ccidDestinationSelector;
+    address public immutable i_router;
+    address public immutable i_link;
+    address public s_ccidReceiver;
+    uint64 public s_ccidDestinationSelector;
 
     constructor(
         address _router,
@@ -25,9 +25,9 @@ contract CCIDSender is Ownable, EverestConsumer {
         uint256 _oraclePayment,
         string memory _signUpURL
     ) EverestConsumer(_link, _oracle, _jobId, _oraclePayment, _signUpURL) {
-        router = _router;
-        link = _link;
-        LinkTokenInterface(link).approve(address(router), type(uint256).max);
+        i_router = _router;
+        i_link = _link;
+        LinkTokenInterface(i_link).approve(address(i_router), type(uint256).max);
     }
 
     function fulfill(bytes32 _requestId, Status _status, uint40 _kycTimestamp)
@@ -59,20 +59,20 @@ contract CCIDSender is Ownable, EverestConsumer {
     function sendKycStatusToCcidReceiver(Status _status) internal {
         string memory statusString = statusToString(_status);
         Client.EVM2AnyMessage memory message = Client.EVM2AnyMessage({
-            receiver: abi.encode(ccidReceiver),
+            receiver: abi.encode(s_ccidReceiver),
             data: abi.encode(statusString),
             tokenAmounts: new Client.EVMTokenAmount[](0),
             extraArgs: "",
-            feeToken: link
+            feeToken: i_link
         });
-        IRouterClient(router).ccipSend(ccidDestinationSelector, message);
+        IRouterClient(i_router).ccipSend(s_ccidDestinationSelector, message);
     }
 
     function setCcidReceiver(address _ccidReceiver) public onlyOwner {
-        ccidReceiver = _ccidReceiver;
+        s_ccidReceiver = _ccidReceiver;
     }
 
     function setCcidDestinationSelector(uint64 _ccidDestinationSelector) public onlyOwner {
-        ccidDestinationSelector = _ccidDestinationSelector;
+        s_ccidDestinationSelector = _ccidDestinationSelector;
     }
 }
