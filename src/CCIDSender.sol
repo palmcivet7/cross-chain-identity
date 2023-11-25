@@ -12,8 +12,8 @@ contract CCIDSender is Ownable, EverestConsumer {
     error CCIDSender__KycTimestampShouldNotBeZeroForKycUser();
     error CCIDSender__KycTimestampShouldBeZeroForNonKycUser();
 
-    address public router;
-    address public link;
+    address public immutable router;
+    address public immutable link;
     address public ccidReceiver;
     uint64 public ccidDestinationSelector;
 
