@@ -110,7 +110,7 @@ A user interacts only with a `CCIDRequest` contract on their chain of choice to 
 
 CCID V2 differs from V1 in the following ways:
 
-- interacts with Everest Consumer through an interface, as opposed to modifying it directly
+- interacts with Everest Consumer through an interface, as opposed to importing it directly
 - requests can be made from chains the Everest Consumer is not on (bi-directional request functionality)
 - additional CCIP "best practices" implemented such as modifiers restricting interactions with unwanted chains
 - Identity status is transmitted as an `IEverest.Status` enum, as opposed to a string
