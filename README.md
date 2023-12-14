@@ -136,7 +136,7 @@ When this project is able to be deployed, these are the steps that must be follo
 - `CCIDRequest` contract owner must call `allowlistSourceChain()` with uint64 of [chain selector](https://docs.chain.link/ccip/supported-networks) for Chain B and true
 - `CCIDRequest` contract owner must call `allowlistSender()` with address of `CCIDFulfill` deployed on Chain B and true
 
-Now anyone call call `requestCcidStatus()` with the following parameters:
+Now anyone can call `requestCcidStatus()` with the following parameters:
 
 - address of `CCIDFulfill` on Chain B
 - address who's identity status is being requested
