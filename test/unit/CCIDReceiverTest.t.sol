@@ -4,7 +4,7 @@ pragma solidity 0.8.19;
 
 import {Test, console} from "forge-std/Test.sol";
 import {DeployCCIDReceiver} from "../../script/DeployCCIDReceiver.s.sol";
-import {CCIDReceiver} from "../../src/CCIDReceiver.sol";
+import {CCIDReceiver} from "../../src/v1/CCIDReceiver.sol";
 import {HelperReceiverConfig} from "../../script/HelperReceiverConfig.s.sol";
 import {Vm} from "forge-std/Vm.sol";
 import {Client} from "@chainlink/contracts/src/v0.8/ccip/libraries/Client.sol";

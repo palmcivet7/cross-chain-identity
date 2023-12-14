@@ -4,7 +4,7 @@ pragma solidity 0.8.19;
 
 import {Test, console} from "forge-std/Test.sol";
 import {DeployCCIDSender} from "../../script/DeployCCIDSender.s.sol";
-import {CCIDSender} from "../../src/CCIDSender.sol";
+import {CCIDSender} from "../../src/v1/CCIDSender.sol";
 import {HelperSenderConfig} from "../../script/HelperSenderConfig.s.sol";
 import {Vm} from "forge-std/Vm.sol";
 import {Client} from "@chainlink/contracts/src/v0.8/ccip/libraries/Client.sol";

@@ -3,7 +3,7 @@
 pragma solidity >=0.8.0;
 
 import {Script} from "forge-std/Script.sol";
-import {CCIDReceiver} from "../src/CCIDReceiver.sol";
+import {CCIDReceiver} from "../src/v1/CCIDReceiver.sol";
 import {HelperReceiverConfig} from "./HelperReceiverConfig.s.sol";
 import {Router} from "@chainlink/contracts/src/v0.8/ccip/Router.sol";
 
