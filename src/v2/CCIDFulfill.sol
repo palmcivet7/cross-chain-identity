@@ -16,6 +16,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     error CCIDFulfill__InvalidChainSelector();
     error CCIDFulfill__SourceChainNotAllowed(uint64 sourceChainSelector);
     error CCIDFulfill__SenderNotAllowed(address sender);
+    error CCIDFulfill__OnlyForwarder();
 
     event CCIDStatusRequested(address requestedAddress);
     event CCIDStatusFulfilled(address requestedAddress, IEverestConsumer.Status status, uint40 kycTimestamp);
@@ -25,6 +26,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     address public immutable i_ccidRequest;
     uint64 public immutable i_chainSelector;
 
+    address public s_forwarderAddress;
     mapping(uint64 chainSelector => bool isAllowlisted) public s_allowlistedSourceChains;
     mapping(address sender => bool isAllowlisted) public s_allowlistedSenders;
     mapping(address => bool) public s_pendingRequests;
@@ -53,6 +55,11 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
             revert CCIDFulfill__SourceChainNotAllowed(_sourceChainSelector);
         }
         if (!s_allowlistedSenders[_sender]) revert CCIDFulfill__SenderNotAllowed(_sender);
+        _;
+    }
+
+    modifier onlyForwarder() {
+        if (msg.sender != s_forwarderAddress) revert CCIDFulfill__OnlyForwarder();
         _;
     }
 
@@ -113,7 +120,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         }
     }
 
-    function performUpkeep(bytes calldata performData) external {
+    function performUpkeep(bytes calldata performData) external onlyForwarder {
         fulfillCcidRequest(performData);
     }
 
@@ -127,6 +134,10 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
 
     function allowlistSender(address _sender, bool _allowed) external onlyOwner {
         s_allowlistedSenders[_sender] = _allowed;
+    }
+
+    function setForwarderAddress(address _forwarderAddress) external onlyOwner {
+        s_forwarderAddress = _forwarderAddress;
     }
 
     ///////////////////////////////
