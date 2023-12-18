@@ -7,16 +7,16 @@ import {DeployCCIDSender} from "../../script/DeployCCIDSender.s.sol";
 import {CCIDSender} from "../../src/v1/CCIDSender.sol";
 import {HelperSenderConfig} from "../../script/HelperSenderConfig.s.sol";
 import {Vm} from "forge-std/Vm.sol";
-import {Client} from "@chainlink/contracts/src/v0.8/ccip/libraries/Client.sol";
-import {Router} from "@chainlink/contracts/src/v0.8/ccip/Router.sol";
+import {Client} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol";
+import {Router} from "@chainlink/contracts-ccip/src/v0.8/ccip/Router.sol";
 import {LinkToken} from "../mocks/LinkToken.sol";
 import {Operator} from "../mocks/operator/Operator.sol";
 import {IEverestConsumer} from "@everest/contracts/interfaces/IEverestConsumer.sol";
-import {EVM2EVMOnRamp} from "@chainlink/contracts/src/v0.8/ccip/onRamp/EVM2EVMOnRamp.sol";
-import {EVM2EVMOnRampSetup} from "@chainlink/contracts/src/v0.8/ccip/test/onRamp/EVM2EVMOnRampSetup.t.sol";
-import {MockARM} from "@chainlink/contracts/src/v0.8/ccip/test/mocks/MockARM.sol";
-import {IPriceRegistry} from "@chainlink/contracts/src/v0.8/ccip/interfaces/IPriceRegistry.sol";
-import {Internal} from "@chainlink/contracts/src/v0.8/ccip/libraries/Internal.sol";
+import {EVM2EVMOnRamp} from "@chainlink/contracts-ccip/src/v0.8/ccip/onRamp/EVM2EVMOnRamp.sol";
+import {EVM2EVMOnRampSetup} from "@chainlink/contracts-ccip/src/v0.8/ccip/test/onRamp/EVM2EVMOnRampSetup.t.sol";
+import {MockARM} from "@chainlink/contracts-ccip/src/v0.8/ccip/test/mocks/MockARM.sol";
+import {IPriceRegistry} from "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IPriceRegistry.sol";
+import {Internal} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Internal.sol";
 
 contract CCIDSenderTest is Test, EVM2EVMOnRampSetup {
     CCIDSender ccidSender;

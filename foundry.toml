@@ -4,12 +4,12 @@ out = "artifacts"
 libs = ["lib"]
 remappings = [
     "@everest/contracts=lib/hardhat-everest-chainlink-consumer/contracts",
-    # "@chainlink/contracts-ccip=lib/ccip/contracts",
-    # "@chainlink/contracts=lib/chainlink/contracts",
-    "@chainlink/contracts=lib/ccip/contracts",
+    "@chainlink/contracts-ccip=lib/ccip/contracts",
+    "@chainlink/contracts=lib/chainlink-brownie-contracts/contracts",
     "@openzeppelin/contracts=lib/openzeppelin-contracts/contracts",
     "@solmate=lib/solmate/src/",
-    "@chainlink-brownie-contracts=lib/chainlink-brownie-contracts",
+    # "@chainlink/contracts=lib/ccip/contracts",
+    # "@chainlink-brownie-contracts=lib/chainlink-brownie-contracts",
 ]
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options

@@ -3,11 +3,11 @@
 pragma solidity 0.8.19;
 
 import {IEverestConsumer} from "@everest/contracts/interfaces/IEverestConsumer.sol";
-import {IRouterClient} from "@chainlink/contracts/src/v0.8/ccip/interfaces/IRouterClient.sol";
-import {Client} from "@chainlink/contracts/src/v0.8/ccip/libraries/Client.sol";
+import {IRouterClient} from "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IRouterClient.sol";
+import {Client} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {LinkTokenInterface} from "@chainlink-brownie-contracts/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
-import {CCIPReceiver} from "@chainlink/contracts/src/v0.8/ccip/applications/CCIPReceiver.sol";
+import {LinkTokenInterface} from "@chainlink/contracts-ccip/src/v0.8/shared/interfaces/LinkTokenInterface.sol";
+import {CCIPReceiver} from "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol";
 
 contract CCIDRequest is Ownable, CCIPReceiver {
     error CCIDRequest__InvalidAddress();

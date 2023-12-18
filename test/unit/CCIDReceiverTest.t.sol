@@ -7,8 +7,8 @@ import {DeployCCIDReceiver} from "../../script/DeployCCIDReceiver.s.sol";
 import {CCIDReceiver} from "../../src/v1/CCIDReceiver.sol";
 import {HelperReceiverConfig} from "../../script/HelperReceiverConfig.s.sol";
 import {Vm} from "forge-std/Vm.sol";
-import {Client} from "@chainlink/contracts/src/v0.8/ccip/libraries/Client.sol";
-import {Router} from "@chainlink/contracts/src/v0.8/ccip/Router.sol";
+import {Client} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol";
+import {Router} from "@chainlink/contracts-ccip/src/v0.8/ccip/Router.sol";
 
 contract CCIDReceiverTest is Test {
     CCIDReceiver ccidReceiver;
