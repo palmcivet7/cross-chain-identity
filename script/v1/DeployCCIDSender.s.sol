@@ -3,7 +3,7 @@
 pragma solidity >=0.8.0;
 
 import {Script} from "forge-std/Script.sol";
-import {CCIDSender} from "../src/v1/CCIDSender.sol";
+import {CCIDSender} from "../../src/v1/CCIDSender.sol";
 import {HelperSenderConfig} from "./HelperSenderConfig.s.sol";
 
 contract DeployCCIDSender is Script {

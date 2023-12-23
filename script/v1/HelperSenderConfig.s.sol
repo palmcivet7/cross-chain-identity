@@ -6,8 +6,8 @@ import {Script} from "forge-std/Script.sol";
 import {Router} from "@chainlink/contracts-ccip/src/v0.8/ccip/Router.sol";
 import {MockARM} from "@chainlink/contracts-ccip/src/v0.8/ccip/test/mocks/MockARM.sol";
 import {WETH9} from "@chainlink/contracts-ccip/src/v0.8/ccip/test/WETH9.sol";
-import {LinkToken} from "../test/mocks/LinkToken.sol";
-import {Operator} from "../test/mocks/operator/Operator.sol";
+import {LinkToken} from "../../test/mocks/LinkToken.sol";
+import {Operator} from "../../test/mocks/operator/Operator.sol";
 
 contract HelperSenderConfig is Script {
     struct NetworkConfig {
