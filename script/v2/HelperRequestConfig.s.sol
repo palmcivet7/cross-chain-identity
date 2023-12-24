@@ -12,6 +12,7 @@ contract HelperRequestConfig is Script {
     struct NetworkConfig {
         address router;
         address link;
+        address mockArm;
     }
 
     NetworkConfig public activeNetworkConfig;
@@ -31,21 +32,24 @@ contract HelperRequestConfig is Script {
     function getSepoliaEthConfig() public pure returns (NetworkConfig memory) {
         return NetworkConfig({
             router: 0x0BF3dE8c5D3e8A2B34D2BEeB17ABfCeBaf363A59, // https://docs.chain.link/ccip/supported-networks#ethereum-sepolia
-            link: 0x779877A7B0D9E8603169DdbD7836e478b4624789 // https://sepolia.etherscan.io/token/0x779877a7b0d9e8603169ddbd7836e478b4624789
+            link: 0x779877A7B0D9E8603169DdbD7836e478b4624789, // https://sepolia.etherscan.io/token/0x779877a7b0d9e8603169ddbd7836e478b4624789
+            mockArm: address(0)
         });
     }
 
     function getGoerliEthConfig() public pure returns (NetworkConfig memory) {
         return NetworkConfig({
             router: address(0), // not available on ccip
-            link: 0x326C977E6efc84E512bB9C30f76E30c160eD06FB // https://static-assets.everest.org/web/images/HowToSetupAndUseTheEverestChainlinkService.pdf#page=8
+            link: 0x326C977E6efc84E512bB9C30f76E30c160eD06FB, // https://static-assets.everest.org/web/images/HowToSetupAndUseTheEverestChainlinkService.pdf#page=8
+            mockArm: address(0)
         });
     }
 
     function getFujiConfig() public pure returns (NetworkConfig memory) {
         return NetworkConfig({
             router: 0xF694E193200268f9a4868e4Aa017A0118C9a8177,
-            link: 0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846
+            link: 0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846,
+            mockArm: address(0)
         });
     }
 
@@ -57,6 +61,6 @@ contract HelperRequestConfig is Script {
         LinkToken mockLink = new LinkToken();
         vm.stopBroadcast();
 
-        return NetworkConfig({router: address(router), link: address(mockLink)});
+        return NetworkConfig({router: address(router), link: address(mockLink), mockArm: address(mockArm)});
     }
 }

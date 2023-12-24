@@ -9,7 +9,7 @@ import {HelperRequestConfig} from "./HelperRequestConfig.s.sol";
 contract DeployCCIDRequest is Script {
     function run() external returns (CCIDRequest, HelperRequestConfig) {
         HelperRequestConfig config = new HelperRequestConfig();
-        (address router, address link) = config.activeNetworkConfig();
+        (address router, address link,) = config.activeNetworkConfig();
 
         vm.startBroadcast();
         CCIDRequest ccidRequest = new CCIDRequest(router, link);
