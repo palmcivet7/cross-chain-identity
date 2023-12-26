@@ -151,18 +151,7 @@ contract CCIDRequestTest is Test, EVM2EVMOnRampSetup {
         vm.stopPrank();
     }
 
-    modifier fundCcidFulfillAndApproveRouter() {
-        vm.startPrank(msg.sender);
-        link.transfer(CCID_FULFILL, STARTING_USER_BALANCE);
-        vm.stopPrank();
-        vm.startPrank(CCID_FULFILL);
-        link.approve(address(router), type(uint256).max);
-        link.approve(onRampAddress, type(uint256).max);
-        vm.stopPrank();
-        _;
-    }
-
-    function test_ccipReceive_reverts_if_source_chain_not_allowed() public fundCcidFulfillAndApproveRouter {
+    function test_ccipReceive_reverts_if_source_chain_not_allowed() public {
         vm.startPrank(msg.sender);
         Router.OffRamp memory newOffRamp =
             Router.OffRamp({sourceChainSelector: SEPOLIA_CHAIN_SELECTOR, offRamp: msg.sender});
@@ -206,11 +195,7 @@ contract CCIDRequestTest is Test, EVM2EVMOnRampSetup {
         _;
     }
 
-    function test_ccipReceive_reverts_if_source_sender_not_allowed()
-        public
-        fundCcidFulfillAndApproveRouter
-        approveSourceChain
-    {
+    function test_ccipReceive_reverts_if_source_sender_not_allowed() public approveSourceChain {
         vm.startPrank(msg.sender);
         Router.OffRamp memory newOffRamp =
             Router.OffRamp({sourceChainSelector: SEPOLIA_CHAIN_SELECTOR, offRamp: msg.sender});
@@ -254,7 +239,7 @@ contract CCIDRequestTest is Test, EVM2EVMOnRampSetup {
         _;
     }
 
-    function test_ccipReceive_works() public fundCcidFulfillAndApproveRouter approveSourceChain approveSourceSender {
+    function test_ccipReceive_works() public approveSourceChain approveSourceSender {
         vm.startPrank(msg.sender);
         Router.OffRamp memory newOffRamp =
             Router.OffRamp({sourceChainSelector: SEPOLIA_CHAIN_SELECTOR, offRamp: msg.sender});
