@@ -17,6 +17,7 @@ contract HelperFulfillConfig is Script {
         address consumer;
         address ccidRequest;
         uint64 chainSelector;
+        address mockArm;
     }
 
     NetworkConfig public activeNetworkConfig;
@@ -39,7 +40,8 @@ contract HelperFulfillConfig is Script {
             link: 0x779877A7B0D9E8603169DdbD7836e478b4624789,
             consumer: address(0),
             ccidRequest: address(0),
-            chainSelector: 0
+            chainSelector: 0,
+            mockArm: address(0)
         });
     }
 
@@ -49,7 +51,8 @@ contract HelperFulfillConfig is Script {
             link: 0x326C977E6efc84E512bB9C30f76E30c160eD06FB,
             consumer: address(0),
             ccidRequest: address(0),
-            chainSelector: 0
+            chainSelector: 0,
+            mockArm: address(0)
         });
     }
 
@@ -68,7 +71,8 @@ contract HelperFulfillConfig is Script {
             link: address(mockLink),
             consumer: address(mockConsumer),
             ccidRequest: address(ccidRequest),
-            chainSelector: SEPOLIA_CHAIN_SELECTOR
+            chainSelector: SEPOLIA_CHAIN_SELECTOR,
+            mockArm: address(mockArm)
         });
     }
 }
