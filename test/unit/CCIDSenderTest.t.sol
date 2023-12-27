@@ -150,7 +150,6 @@ contract CCIDSenderTest is Test, EVM2EVMOnRampSetup {
         vm.stopPrank();
         vm.startPrank(address(ccidSender));
         link.approve(address(router), type(uint256).max);
-        link.approve(onRampAddress, type(uint256).max);
         vm.stopPrank();
         _;
     }
