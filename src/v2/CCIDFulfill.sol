@@ -18,8 +18,10 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     error CCIDFulfill__SenderNotAllowed(address sender);
     error CCIDFulfill__OnlyForwarder();
 
-    event CCIDStatusRequested(address requestedAddress);
-    event CCIDStatusFulfilled(address requestedAddress, IEverestConsumer.Status status, uint40 kycTimestamp);
+    event CCIDStatusRequested(address indexed requestedAddress);
+    event CCIDStatusFulfilled(
+        address indexed requestedAddress, IEverestConsumer.Status indexed status, uint40 indexed kycTimestamp
+    );
 
     LinkTokenInterface public immutable i_link;
     IEverestConsumer public immutable i_consumer;

@@ -15,7 +15,9 @@ contract CCIDRequest is Ownable, CCIPReceiver {
     error CCIDRequest__SourceChainNotAllowed(uint64 sourceChainSelector);
     error CCIDRequest__SenderNotAllowed(address sender);
 
-    event CCIDStatusReceived(address requestedAddress, IEverestConsumer.Status status, uint40 kycTimestamp);
+    event CCIDStatusReceived(
+        address indexed requestedAddress, IEverestConsumer.Status indexed status, uint40 indexed kycTimestamp
+    );
 
     LinkTokenInterface public immutable i_link;
 
