@@ -128,12 +128,9 @@ contract CCIDRequestTest is Test, EVM2EVMOnRampSetup {
         _;
     }
 
-    modifier fundCcidRequestAndApproveRouter() {
+    modifier fundCcidRequest() {
         vm.startPrank(msg.sender);
         link.transfer(address(ccidRequest), STARTING_USER_BALANCE);
-        vm.stopPrank();
-        vm.startPrank(address(ccidRequest));
-        link.approve(address(router), type(uint256).max);
         vm.stopPrank();
         _;
     }
@@ -143,7 +140,7 @@ contract CCIDRequestTest is Test, EVM2EVMOnRampSetup {
         fundLinkToRevealerAndApprove
         allowDestinationChainSelector
         applyRampUpdates
-        fundCcidRequestAndApproveRouter
+        fundCcidRequest
     {
         vm.startPrank(REVEALER);
         ccidRequest.requestCcidStatus(CCID_FULFILL, REVEALEE, SEPOLIA_CHAIN_SELECTOR);
