@@ -194,6 +194,8 @@ I also left out the bytes32 `requestId`. Adding this and allowing cross-chain qu
 
 The Chainlink Log Trigger Automation needs to be funded with LINK tokens. CCID V2 currently assumes the registration is done manually and tokens are deposited in a subscription. One of the next steps will be making the `requestCcidStatus()` require a payment of LINK tokens that are also sent across chain and used to pay for the use of Log Trigger Automation.
 
+_Update: CCIDRequest currently takes a LINK payment for CCIP fees and an amount to send across chain. CCIDFulfill doesn't have the functionality for handling the received LINK yet._
+
 The `IEverestConsumer.Status` enum uses [my pull request version](https://github.com/palmcivet7/everest-chainlink-consumer/blob/master/contracts/interfaces/IEverestConsumer.sol) because the `checkLog()` interprets the enum value as a `uint8` and I believe the order in the original interface is incorrect.
 
 ## Development Resources
