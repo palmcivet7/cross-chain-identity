@@ -14,6 +14,7 @@ contract CCIDRequest is Ownable, CCIPReceiver {
     error CCIDRequest__DestinationChainNotAllowlisted(uint64 destinationChainSelector);
     error CCIDRequest__SourceChainNotAllowed(uint64 sourceChainSelector);
     error CCIDRequest__SenderNotAllowed(address sender);
+    error CCIDRequest__LinkTransferFailed();
 
     event CCIDStatusReceived(
         address indexed requestedAddress, IEverestConsumer.Status indexed status, uint40 indexed kycTimestamp
@@ -55,17 +56,27 @@ contract CCIDRequest is Ownable, CCIPReceiver {
     /////////// CCIP /////////////
     /////////////////////////////
 
-    function requestCcidStatus(address _ccidFulfill, address _requestedAddress, uint64 _chainSelector)
-        public
-        onlyAllowlistedDestinationChain(_chainSelector)
-    {
+    function requestCcidStatus(
+        uint256 _linkAmountToSend,
+        address _ccidFulfill,
+        address _requestedAddress,
+        uint64 _chainSelector
+    ) public onlyAllowlistedDestinationChain(_chainSelector) {
+        Client.EVMTokenAmount[] memory tokenAmounts = new Client.EVMTokenAmount[](1);
+        tokenAmounts[0] = Client.EVMTokenAmount({token: address(i_link), amount: _linkAmountToSend});
+
         Client.EVM2AnyMessage memory message = Client.EVM2AnyMessage({
             receiver: abi.encode(_ccidFulfill),
             data: abi.encode(_requestedAddress),
-            tokenAmounts: new Client.EVMTokenAmount[](0),
+            tokenAmounts: tokenAmounts,
             extraArgs: "",
             feeToken: address(i_link)
         });
+
+        uint256 fees = IRouterClient(i_router).getFee(_chainSelector, message);
+        uint256 linkToPay = fees + _linkAmountToSend;
+
+        if (!i_link.transferFrom(msg.sender, address(this), linkToPay)) revert CCIDRequest__LinkTransferFailed();
         IRouterClient(i_router).ccipSend(_chainSelector, message);
     }
 
