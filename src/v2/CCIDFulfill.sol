@@ -41,6 +41,17 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     mapping(address sender => bool isAllowlisted) public s_allowlistedSenders;
     mapping(address => bool) public s_pendingRequests;
 
+    /**
+     * @dev This contract is registered with Chainlink Automation when it is deployed and requires the
+     *      deployer to hold LINK tokens in their wallet.
+     * @param _router - address of the CCIP router
+     * @param _link - address of the LINK token
+     * @param _consumer - address of the Everest Consumer contract
+     * @param _automationConsumer - address of the Chainlink Automation Consumer contract
+     * @param _automationRegistrar - address of the Chainlink Automation Registrar contract
+     * @param _ccidRequest - address of the CCIDRequest contract on other chain
+     * @param _chainSelector - CCIP destination chain selector of chain CCIDRequest is deployed on
+     */
     constructor(
         address _router,
         address _link,
