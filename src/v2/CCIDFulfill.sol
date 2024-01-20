@@ -12,6 +12,7 @@ import {AutomationBase} from "@chainlink/contracts-ccip/src/v0.8/automation/Auto
 import {ILogAutomation, Log} from "@chainlink/contracts-ccip/src/v0.8/automation/interfaces/ILogAutomation.sol";
 import {IAutomationRegistryConsumer} from
     "@chainlink/contracts-ccip/src/v0.8/automation/interfaces/IAutomationRegistryConsumer.sol";
+import {IAutomationRegistrar, RegistrationParams} from "./interfaces/IAutomationRegistrar.sol";
 
 contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     error CCIDFulfill__InvalidAddress();
@@ -21,6 +22,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     error CCIDFulfill__OnlyForwarder();
     error CCIDFulfill__LinkTransferFailed();
     error CCIDFulfill__NoLinkToWithdraw();
+    error CCIDFulfill__AutomationRegistrationFailed();
 
     event CCIDStatusRequested(address indexed requestedAddress);
     event CCIDStatusFulfilled(
@@ -32,9 +34,9 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     IAutomationRegistryConsumer public immutable i_automationConsumer;
     address public immutable i_ccidRequest;
     uint64 public immutable i_chainSelector;
+    uint256 public immutable i_subId;
 
     address public s_forwarderAddress;
-    uint256 public s_automationSubscriptionId;
     mapping(uint64 chainSelector => bool isAllowlisted) public s_allowlistedSourceChains;
     mapping(address sender => bool isAllowlisted) public s_allowlistedSenders;
     mapping(address => bool) public s_pendingRequests;
@@ -44,12 +46,15 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         address _link,
         address _consumer,
         address _automationConsumer,
+        address _automationRegistrar,
         address _ccidRequest,
         uint64 _chainSelector
     ) CCIPReceiver(_router) {
         if (_router == address(0)) revert CCIDFulfill__InvalidAddress();
         if (_link == address(0)) revert CCIDFulfill__InvalidAddress();
         if (_consumer == address(0)) revert CCIDFulfill__InvalidAddress();
+        if (_automationConsumer == address(0)) revert CCIDFulfill__InvalidAddress();
+        if (_automationRegistrar == address(0)) revert CCIDFulfill__InvalidAddress();
         if (_ccidRequest == address(0)) revert CCIDFulfill__InvalidAddress();
         if (_chainSelector == 0) revert CCIDFulfill__InvalidChainSelector();
         i_link = LinkTokenInterface(_link);
@@ -58,6 +63,23 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         i_ccidRequest = _ccidRequest;
         i_chainSelector = _chainSelector;
         i_link.approve(address(i_router), type(uint256).max);
+
+        RegistrationParams memory params = RegistrationParams({
+            name: "",
+            encryptedEmail: hex"",
+            upkeepContract: address(this),
+            gasLimit: 2000000,
+            adminAddress: owner(),
+            triggerType: 0,
+            checkData: hex"",
+            triggerConfig: hex"",
+            offchainConfig: hex"",
+            amount: 1000000000000000000
+        });
+        i_link.approve(_automationRegistrar, params.amount);
+        uint256 upkeepID = IAutomationRegistrar(_automationRegistrar).registerUpkeep(params);
+        if (upkeepID == 0) revert CCIDFulfill__AutomationRegistrationFailed();
+        i_subId = upkeepID;
     }
 
     ///////////////////////////////
@@ -114,7 +136,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
             revert CCIDFulfill__LinkTransferFailed();
         }
 
-        i_automationConsumer.addFunds(s_automationSubscriptionId, uint96(linkAutomationPayment));
+        i_automationConsumer.addFunds(i_subId, uint96(linkAutomationPayment));
 
         i_consumer.requestStatus(requestedAddress);
 
@@ -175,10 +197,6 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
 
     function setForwarderAddress(address _forwarderAddress) external onlyOwner {
         s_forwarderAddress = _forwarderAddress;
-    }
-
-    function setAutomationSubscriptionId(uint256 _automationSubscriptionId) external onlyOwner {
-        s_automationSubscriptionId = _automationSubscriptionId;
     }
 
     ///////////////////////////////
