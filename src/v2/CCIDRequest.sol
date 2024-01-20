@@ -26,6 +26,10 @@ contract CCIDRequest is Ownable, CCIPReceiver {
     mapping(uint64 chainSelector => bool isAllowlisted) public s_allowlistedSourceChains;
     mapping(address sender => bool isAllowlisted) public s_allowlistedSenders;
 
+    /**
+     * @param _router - address of the CCIP Router contract
+     * @param _link - address of the LINK token
+     */
     constructor(address _router, address _link) CCIPReceiver(_router) {
         if (_router == address(0)) revert CCIDRequest__InvalidAddress();
         if (_link == address(0)) revert CCIDRequest__InvalidAddress();
