@@ -130,6 +130,11 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         emit CCIDStatusFulfilled(requestedAddress, status, kycTimestamp);
     }
 
+    /**
+     * @notice This uses Chainlink Automation's getMinBalance() function for "estimating" the price of the automation job.
+     * If future versions of Automation include an equivalent to CCIP's getFees() function, that should be used instead.
+     * @param message The requestedAddress and LINK payment sent via CCIP
+     */
     function _ccipReceive(Client.Any2EVMMessage memory message)
         internal
         override
