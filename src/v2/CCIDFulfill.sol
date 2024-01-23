@@ -23,6 +23,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     error CCIDFulfill__LinkTransferFailed();
     error CCIDFulfill__NoLinkToWithdraw();
     error CCIDFulfill__AutomationRegistrationFailed();
+    error CCIDFulfill__NotEnoughLinkSent();
 
     event CCIDStatusRequested(address indexed requestedAddress);
     event CCIDStatusFulfilled(
@@ -136,18 +137,17 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         onlyAllowlisted(message.sourceChainSelector, abi.decode(message.sender, (address)))
     {
         uint256 receivedLink = message.destTokenAmounts[0].amount;
+        uint256 linkEverestPayment = i_consumer.oraclePayment();
+        uint96 linkAutomationPayment = i_automationConsumer.getMinBalance(i_subId);
+        if (receivedLink < linkEverestPayment + uint256(linkAutomationPayment)) revert CCIDFulfill__NotEnoughLinkSent();
 
         (address requestedAddress) = abi.decode(message.data, (address));
         s_pendingRequests[requestedAddress] = true;
 
-        uint256 linkEverestPayment = i_consumer.oraclePayment();
-        uint256 linkAutomationPayment = receivedLink - linkEverestPayment;
-
         if (!i_link.transferFrom(address(this), address(i_consumer), linkEverestPayment)) {
             revert CCIDFulfill__LinkTransferFailed();
         }
-
-        i_automationConsumer.addFunds(i_subId, uint96(linkAutomationPayment));
+        i_automationConsumer.addFunds(i_subId, linkAutomationPayment);
 
         i_consumer.requestStatus(requestedAddress);
 
