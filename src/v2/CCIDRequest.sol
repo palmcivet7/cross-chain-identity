@@ -27,8 +27,8 @@ contract CCIDRequest is Ownable, CCIPReceiver {
     mapping(address sender => bool isAllowlisted) public s_allowlistedSenders;
 
     /**
-     * @param _router - address of the CCIP Router contract
-     * @param _link - address of the LINK token
+     * @param _router Address of the CCIP Router contract.
+     * @param _link Address of the LINK token.
      */
     constructor(address _router, address _link) CCIPReceiver(_router) {
         if (_router == address(0)) revert CCIDRequest__InvalidAddress();
@@ -60,6 +60,17 @@ contract CCIDRequest is Ownable, CCIPReceiver {
     /////////// CCIP /////////////
     /////////////////////////////
 
+    /**
+     * @dev This is how the user requests an identity status.
+     * @dev The only function in the entire protocol the user needs to interact with.
+     * @param _linkAmountToSend Amount of LINK to send across chain to pay for Automation and the Oracle Request.
+     * This amount does NOT include the CCIP fee, which will also be taken when a user interacts with this function.
+     * Since we can't calculate the exact amount for the other chain services, the transaction on the other chain
+     * will revert if not enough is sent to cover the costs.
+     * @param _ccidFulfill Address of CCIDFulfill contract on the chain the Everest consumer is on.
+     * @param _requestedAddress Address who's identity status is being queried.
+     * @param _chainSelector CCIP Destination Chain Selector of the chain the CCIDFulfill contract is on.
+     */
     function requestCcidStatus(
         uint256 _linkAmountToSend,
         address _ccidFulfill,
