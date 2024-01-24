@@ -61,8 +61,8 @@ contract CCIDRequest is Ownable, CCIPReceiver {
     /////////////////////////////
 
     /**
-     * @dev This is how the user requests an identity status.
-     * @dev The only function in the entire protocol the user needs to interact with.
+     * @dev This is how the user requests an identity status and is the only function in the entire protocol
+     * the user needs to interact with.
      * @param _linkAmountToSend Amount of LINK to send across chain to pay for Automation and the Oracle Request.
      * This amount does NOT include the CCIP fee, which will also be taken when a user interacts with this function.
      * Since we can't calculate the exact amount for the other chain services, the transaction on the other chain
