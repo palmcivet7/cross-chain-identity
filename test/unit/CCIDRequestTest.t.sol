@@ -36,6 +36,7 @@ contract CCIDRequestTest is Test, EVM2EVMOnRampSetup {
     address public CCID_FULFILL = makeAddr("CCID_FULFILL");
     uint64 public SEPOLIA_CHAIN_SELECTOR = 16015286601757825753; // Sepolia
     uint16 public constant MAX_RET_BYTES = 4 + 4 * 32;
+    uint256 public constant LINK_AMOUNT_TO_SEND = 2 ether;
 
     function setUp() public override {
         DeployCCIDRequest deployer = new DeployCCIDRequest();
@@ -105,7 +106,7 @@ contract CCIDRequestTest is Test, EVM2EVMOnRampSetup {
                 CCIDRequest.CCIDRequest__DestinationChainNotAllowlisted.selector, 16015286601757825753
             )
         );
-        ccidRequest.requestCcidStatus(CCID_FULFILL, REVEALEE, SEPOLIA_CHAIN_SELECTOR);
+        ccidRequest.requestCcidStatus(LINK_AMOUNT_TO_SEND, CCID_FULFILL, REVEALEE, SEPOLIA_CHAIN_SELECTOR);
         vm.stopPrank();
     }
 
@@ -143,7 +144,7 @@ contract CCIDRequestTest is Test, EVM2EVMOnRampSetup {
         fundCcidRequest
     {
         vm.startPrank(REVEALER);
-        ccidRequest.requestCcidStatus(CCID_FULFILL, REVEALEE, SEPOLIA_CHAIN_SELECTOR);
+        ccidRequest.requestCcidStatus(LINK_AMOUNT_TO_SEND, CCID_FULFILL, REVEALEE, SEPOLIA_CHAIN_SELECTOR);
         vm.stopPrank();
     }
 

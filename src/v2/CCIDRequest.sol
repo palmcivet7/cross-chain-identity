@@ -76,7 +76,7 @@ contract CCIDRequest is Ownable, CCIPReceiver {
         address _ccidFulfill,
         address _requestedAddress,
         uint64 _chainSelector
-    ) public onlyAllowlistedDestinationChain(_chainSelector) {
+    ) public onlyAllowlistedDestinationChain(_chainSelector) returns (bytes32 messageId) {
         Client.EVMTokenAmount[] memory tokenAmounts = new Client.EVMTokenAmount[](1);
         tokenAmounts[0] = Client.EVMTokenAmount({token: address(i_link), amount: _linkAmountToSend});
 
@@ -92,7 +92,7 @@ contract CCIDRequest is Ownable, CCIPReceiver {
         uint256 linkToPay = fees + _linkAmountToSend;
 
         if (!i_link.transferFrom(msg.sender, address(this), linkToPay)) revert CCIDRequest__LinkTransferFailed();
-        IRouterClient(i_router).ccipSend(_chainSelector, message);
+        messageId = IRouterClient(i_router).ccipSend(_chainSelector, message);
     }
 
     function _ccipReceive(Client.Any2EVMMessage memory message)
