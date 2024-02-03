@@ -10,11 +10,19 @@ contract DeployCCIDFulfill is Script {
     function run() external returns (CCIDFulfill, HelperFulfillConfig) {
         HelperFulfillConfig config = new HelperFulfillConfig();
 
-        (address router, address link, address consumer, address ccidRequest, uint64 chainSelector,) =
-            config.activeNetworkConfig();
+        (
+            address router,
+            address link,
+            address consumer,
+            address automationConsumer,
+            address automationRegistrar,
+            address ccidRequest,
+            uint64 chainSelector,
+        ) = config.activeNetworkConfig();
 
         vm.startBroadcast();
-        CCIDFulfill ccidFulfill = new CCIDFulfill(router, link, consumer, ccidRequest, chainSelector);
+        CCIDFulfill ccidFulfill =
+            new CCIDFulfill(router, link, consumer, automationConsumer, automationRegistrar, ccidRequest, chainSelector);
         vm.stopBroadcast();
         return (ccidFulfill, config);
     }

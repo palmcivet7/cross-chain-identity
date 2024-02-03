@@ -15,6 +15,8 @@ contract HelperFulfillConfig is Script {
         address router;
         address link;
         address consumer;
+        address automationConsumer;
+        address automationRegistrar;
         address ccidRequest;
         uint64 chainSelector;
         address mockArm;
@@ -39,6 +41,8 @@ contract HelperFulfillConfig is Script {
             router: 0x0BF3dE8c5D3e8A2B34D2BEeB17ABfCeBaf363A59,
             link: 0x779877A7B0D9E8603169DdbD7836e478b4624789,
             consumer: address(0),
+            automationConsumer: address(0),
+            automationRegistrar: address(0),
             ccidRequest: address(0),
             chainSelector: 0,
             mockArm: address(0)
@@ -49,7 +53,9 @@ contract HelperFulfillConfig is Script {
         return NetworkConfig({
             router: address(0), // not available on ccip
             link: 0x326C977E6efc84E512bB9C30f76E30c160eD06FB,
-            consumer: address(0),
+            consumer: 0xd6c576B4f6Ab3d70b49FA2a1F73711943f3a14f2,
+            automationConsumer: address(0),
+            automationRegistrar: address(0),
             ccidRequest: address(0),
             chainSelector: 0,
             mockArm: address(0)
@@ -70,6 +76,8 @@ contract HelperFulfillConfig is Script {
             router: address(router),
             link: address(mockLink),
             consumer: address(mockConsumer),
+            automationConsumer: address(0),
+            automationRegistrar: address(0),
             ccidRequest: address(ccidRequest),
             chainSelector: SEPOLIA_CHAIN_SELECTOR,
             mockArm: address(mockArm)
