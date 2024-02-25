@@ -47,7 +47,7 @@ contract CCIDFulfillTest is Test, EVM2EVMOnRampSetup {
     function setUp() public override {
         DeployCCIDFulfill deployer = new DeployCCIDFulfill();
         (ccidFulfill, helperConfig) = deployer.run();
-        (routerAddress, linkAddress, consumerAddress, requestAddress,, mockArmAddress) =
+        (routerAddress, linkAddress, consumerAddress,,, requestAddress,, mockArmAddress) =
             helperConfig.activeNetworkConfig();
         router = Router(routerAddress);
         link = LinkToken(linkAddress);

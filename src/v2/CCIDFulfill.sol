@@ -42,6 +42,23 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     mapping(address sender => bool isAllowlisted) public s_allowlistedSenders;
     mapping(address => bool) public s_pendingRequests;
 
+    ///////////////////////////////
+    ///////// Modifiers //////////
+    /////////////////////////////
+
+    modifier onlyAllowlisted(uint64 _sourceChainSelector, address _sender) {
+        if (!s_allowlistedSourceChains[_sourceChainSelector]) {
+            revert CCIDFulfill__SourceChainNotAllowed(_sourceChainSelector);
+        }
+        if (!s_allowlistedSenders[_sender]) revert CCIDFulfill__SenderNotAllowed(_sender);
+        _;
+    }
+
+    modifier onlyForwarder() {
+        if (msg.sender != s_forwarderAddress) revert CCIDFulfill__OnlyForwarder();
+        _;
+    }
+
     /**
      * @dev This contract is registered with Chainlink Automation when it is deployed and requires the
      *      deployer to hold LINK tokens in their wallet.
@@ -92,23 +109,6 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         uint256 upkeepID = IAutomationRegistrar(_automationRegistrar).registerUpkeep(params);
         if (upkeepID == 0) revert CCIDFulfill__AutomationRegistrationFailed();
         i_subId = upkeepID;
-    }
-
-    ///////////////////////////////
-    ///////// Modifiers //////////
-    /////////////////////////////
-
-    modifier onlyAllowlisted(uint64 _sourceChainSelector, address _sender) {
-        if (!s_allowlistedSourceChains[_sourceChainSelector]) {
-            revert CCIDFulfill__SourceChainNotAllowed(_sourceChainSelector);
-        }
-        if (!s_allowlistedSenders[_sender]) revert CCIDFulfill__SenderNotAllowed(_sender);
-        _;
-    }
-
-    modifier onlyForwarder() {
-        if (msg.sender != s_forwarderAddress) revert CCIDFulfill__OnlyForwarder();
-        _;
     }
 
     ///////////////////////////////
