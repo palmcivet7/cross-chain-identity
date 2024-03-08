@@ -23,11 +23,11 @@ contract CCIDRequest is Ownable, CCIPReceiver {
     /*//////////////////////////////////////////////////////////////
                                VARIABLES
     //////////////////////////////////////////////////////////////*/
-    LinkTokenInterface public immutable i_link;
+    LinkTokenInterface private immutable i_link;
 
-    mapping(uint64 chainSelector => bool isAllowlisted) public s_allowlistedDestinationChains;
-    mapping(uint64 chainSelector => bool isAllowlisted) public s_allowlistedSourceChains;
-    mapping(address sender => bool isAllowlisted) public s_allowlistedSenders;
+    mapping(uint64 chainSelector => bool isAllowlisted) private s_allowlistedDestinationChains;
+    mapping(uint64 chainSelector => bool isAllowlisted) private s_allowlistedSourceChains;
+    mapping(address sender => bool isAllowlisted) private s_allowlistedSenders;
 
     /*//////////////////////////////////////////////////////////////
                                  EVENTS
