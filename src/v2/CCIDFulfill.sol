@@ -15,6 +15,9 @@ import {IAutomationRegistryConsumer} from
 import {IAutomationRegistrar, RegistrationParams} from "./interfaces/IAutomationRegistrar.sol";
 
 contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
+    /*//////////////////////////////////////////////////////////////
+                                 ERRORS
+    //////////////////////////////////////////////////////////////*/
     error CCIDFulfill__InvalidAddress();
     error CCIDFulfill__InvalidChainSelector();
     error CCIDFulfill__SourceChainNotAllowed(uint64 sourceChainSelector);
@@ -25,27 +28,32 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     error CCIDFulfill__AutomationRegistrationFailed();
     error CCIDFulfill__NotEnoughLinkSent();
 
+    /*//////////////////////////////////////////////////////////////
+                                 EVENTS
+    //////////////////////////////////////////////////////////////*/
     event CCIDStatusRequested(address indexed requestedAddress);
     event CCIDStatusFulfilled(
         address indexed requestedAddress, IEverestConsumer.Status indexed status, uint40 indexed kycTimestamp
     );
 
-    LinkTokenInterface public immutable i_link;
-    IEverestConsumer public immutable i_consumer;
-    IAutomationRegistryConsumer public immutable i_automationConsumer;
-    address public immutable i_ccidRequest;
-    uint64 public immutable i_chainSelector;
-    uint256 public immutable i_subId;
+    /*//////////////////////////////////////////////////////////////
+                               VARIABLES
+    //////////////////////////////////////////////////////////////*/
+    LinkTokenInterface private immutable i_link;
+    IEverestConsumer private immutable i_consumer;
+    IAutomationRegistryConsumer private immutable i_automationConsumer;
+    address private immutable i_ccidRequest;
+    uint64 private immutable i_chainSelector;
+    uint256 private immutable i_subId;
 
-    address public s_forwarderAddress;
-    mapping(uint64 chainSelector => bool isAllowlisted) public s_allowlistedSourceChains;
-    mapping(address sender => bool isAllowlisted) public s_allowlistedSenders;
-    mapping(address => bool) public s_pendingRequests;
+    address private s_forwarderAddress;
+    mapping(uint64 chainSelector => bool isAllowlisted) private s_allowlistedSourceChains;
+    mapping(address sender => bool isAllowlisted) private s_allowlistedSenders;
+    mapping(address => bool) private s_pendingRequests;
 
-    ///////////////////////////////
-    ///////// Modifiers //////////
-    /////////////////////////////
-
+    /*//////////////////////////////////////////////////////////////
+                               MODIFIERS
+    //////////////////////////////////////////////////////////////*/
     modifier onlyAllowlisted(uint64 _sourceChainSelector, address _sender) {
         if (!s_allowlistedSourceChains[_sourceChainSelector]) {
             revert CCIDFulfill__SourceChainNotAllowed(_sourceChainSelector);
@@ -59,6 +67,9 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         _;
     }
 
+    /*//////////////////////////////////////////////////////////////
+                              CONSTRUCTOR
+    //////////////////////////////////////////////////////////////*/
     /**
      * @dev This contract is registered with Chainlink Automation when it is deployed and requires the
      *      deployer to hold LINK tokens in their wallet.
@@ -111,10 +122,9 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         i_subId = upkeepID;
     }
 
-    ///////////////////////////////
-    /////////// CCIP /////////////
-    /////////////////////////////
-
+    /*//////////////////////////////////////////////////////////////
+                                  CCIP
+    //////////////////////////////////////////////////////////////*/
     function fulfillCcidRequest(bytes calldata _fulfilledData) private {
         (address requestedAddress, IEverestConsumer.Status status, uint40 kycTimestamp) =
             abi.decode(_fulfilledData, (address, IEverestConsumer.Status, uint40));
@@ -159,10 +169,9 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         emit CCIDStatusRequested(requestedAddress);
     }
 
-    ///////////////////////////////
-    ///////// Automation /////////
-    /////////////////////////////
-
+    /*//////////////////////////////////////////////////////////////
+                               AUTOMATION
+    //////////////////////////////////////////////////////////////*/
     function checkLog(Log calldata log, bytes memory /* checkData */ )
         external
         view
@@ -189,20 +198,18 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         fulfillCcidRequest(performData);
     }
 
-    ///////////////////////////////
-    ///////// Withdraw ///////////
-    /////////////////////////////
-
+    /*//////////////////////////////////////////////////////////////
+                                WITHDRAW
+    //////////////////////////////////////////////////////////////*/
     function withdrawLink() external onlyOwner {
         uint256 balance = i_link.balanceOf(address(this));
         if (balance == 0) revert CCIDFulfill__NoLinkToWithdraw();
         if (!i_link.transfer(msg.sender, balance)) revert CCIDFulfill__LinkTransferFailed();
     }
 
-    ///////////////////////////////
-    ///////// Setter /////////////
-    /////////////////////////////
-
+    /*//////////////////////////////////////////////////////////////
+                                 SETTER
+    //////////////////////////////////////////////////////////////*/
     function allowlistSourceChain(uint64 _sourceChainSelector, bool _allowed) external onlyOwner {
         s_allowlistedSourceChains[_sourceChainSelector] = _allowed;
     }
@@ -215,10 +222,9 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         s_forwarderAddress = _forwarderAddress;
     }
 
-    ///////////////////////////////
-    ///////// Utility ////////////
-    /////////////////////////////
-
+    /*//////////////////////////////////////////////////////////////
+                                UTILITY
+    //////////////////////////////////////////////////////////////*/
     function bytes32ToAddress(bytes32 _bytes) private pure returns (address) {
         return address(uint160(uint256(_bytes)));
     }
