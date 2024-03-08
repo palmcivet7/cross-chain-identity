@@ -249,7 +249,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
 
     /**
      * @notice CCIP best practices to prevent unwanted messages. Can only be set by the owner.
-     * @param _sender CCIDRequest contract address
+     * @param _sender CCIDRequest contract address.
      * @param _allowed Set to true to allow requests from CCIDRequest.
      */
     function allowlistSender(address _sender, bool _allowed) external onlyOwner {

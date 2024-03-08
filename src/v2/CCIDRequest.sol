@@ -149,14 +149,29 @@ contract CCIDRequest is Ownable, CCIPReceiver {
     /*//////////////////////////////////////////////////////////////
                                  SETTER
     //////////////////////////////////////////////////////////////*/
+    /**
+     * @notice CCIP best practices to prevent unwanted messages. Can only be set by the owner.
+     * @param _destinationChainSelector CCIP Chain Selector of destination chain the CCIDFulfill contract is on.
+     * @param _allowed Set to true to allow requests to destination chain.
+     */
     function allowlistDestinationChain(uint64 _destinationChainSelector, bool _allowed) external onlyOwner {
         s_allowlistedDestinationChains[_destinationChainSelector] = _allowed;
     }
 
+    /**
+     * @notice CCIP best practices to prevent unwanted messages. Can only be set by the owner.
+     * @param _sourceChainSelector CCIP Chain Selector of source chain the CCIDFulfill contract is on.
+     * @param _allowed Set to true to allow fulfilled requests from source chain.
+     */
     function allowlistSourceChain(uint64 _sourceChainSelector, bool _allowed) external onlyOwner {
         s_allowlistedSourceChains[_sourceChainSelector] = _allowed;
     }
 
+    /**
+     * @notice CCIP best practices to prevent unwanted messages. Can only be set by the owner.
+     * @param _sender CCIDFulfill contract address.
+     * @param _allowed Set to true to allow fulfilled requests from CCIDFulfill.
+     */
     function allowlistSender(address _sender, bool _allowed) external onlyOwner {
         s_allowlistedSenders[_sender] = _allowed;
     }
