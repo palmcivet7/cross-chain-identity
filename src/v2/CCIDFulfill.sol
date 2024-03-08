@@ -14,6 +14,13 @@ import {IAutomationRegistryConsumer} from
     "@chainlink/contracts-ccip/src/v0.8/automation/interfaces/IAutomationRegistryConsumer.sol";
 import {IAutomationRegistrar, RegistrationParams} from "./interfaces/IAutomationRegistrar.sol";
 
+/**
+ * @title Cross-Chain Identity: Fulfill (CCIDFulfill)
+ * @author palmcivet
+ * @notice This contract is one of two in the CCID system. The other contract is CCIDRequest.
+ * This is the contract that receives the cross-chain request for the identity status of an address,
+ * and fulfills the request by sending it back to the CCIDRequest contract on the user's chain.
+ */
 contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     /*//////////////////////////////////////////////////////////////
                                  ERRORS

@@ -9,6 +9,13 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {LinkTokenInterface} from "@chainlink/contracts-ccip/src/v0.8/shared/interfaces/LinkTokenInterface.sol";
 import {CCIPReceiver} from "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol";
 
+/**
+ * @title Cross-Chain Identity: Request (CCIDRequest)
+ * @author palmcivet
+ * @notice This contract is one of two in the CCID system. The other contract is CCIDFulfill.
+ * This is the contract the user interacts with to make a cross-chain request for the identity status of an address.
+ * Fulfilled requests are sent back to this contract.
+ */
 contract CCIDRequest is Ownable, CCIPReceiver {
     /*//////////////////////////////////////////////////////////////
                                  ERRORS
