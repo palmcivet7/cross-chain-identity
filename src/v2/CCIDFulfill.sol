@@ -125,6 +125,13 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     /*//////////////////////////////////////////////////////////////
                                   CCIP
     //////////////////////////////////////////////////////////////*/
+    /**
+     * @notice This function is called internally by Chainlink Automation with the fulfilled request data, sending it back to
+     * the CCIDRequest contract on the source chain.
+     * @param _fulfilledData Contains the requestedAddress, status, and kycTimestamp of a request.
+     * @dev Sets the s_pendingRequests mapping for the requestedAddress to false, so the request will not be automatically
+     * fulfilled again.
+     */
     function fulfillCcidRequest(bytes calldata _fulfilledData) private {
         (address requestedAddress, IEverestConsumer.Status status, uint40 kycTimestamp) =
             abi.decode(_fulfilledData, (address, IEverestConsumer.Status, uint40));
@@ -143,20 +150,21 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     /**
      * @notice This uses Chainlink Automation's getMinBalance() function for "estimating" the price of the automation job.
      * If future versions of Automation include an equivalent to CCIP's getFees() function, that should be used instead.
-     * @param message The requestedAddress and LINK payment sent via CCIP
+     * @param _message The requestedAddress and LINK payment sent via CCIP
+     * @dev The requestedAddress is mapped to true in s_pendingRequests.
      */
-    function _ccipReceive(Client.Any2EVMMessage memory message)
+    function _ccipReceive(Client.Any2EVMMessage memory _message)
         internal
         override
         onlyRouter
-        onlyAllowlisted(message.sourceChainSelector, abi.decode(message.sender, (address)))
+        onlyAllowlisted(_message.sourceChainSelector, abi.decode(_message.sender, (address)))
     {
-        uint256 receivedLink = message.destTokenAmounts[0].amount;
+        uint256 receivedLink = _message.destTokenAmounts[0].amount;
         uint256 linkEverestPayment = i_consumer.oraclePayment();
         uint96 linkAutomationPayment = i_automationConsumer.getMinBalance(i_subId);
         if (receivedLink < linkEverestPayment + uint256(linkAutomationPayment)) revert CCIDFulfill__NotEnoughLinkSent();
 
-        (address requestedAddress) = abi.decode(message.data, (address));
+        (address requestedAddress) = abi.decode(_message.data, (address));
         s_pendingRequests[requestedAddress] = true;
 
         if (!i_link.transferFrom(address(this), address(i_consumer), linkEverestPayment)) {
@@ -172,6 +180,12 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     /*//////////////////////////////////////////////////////////////
                                AUTOMATION
     //////////////////////////////////////////////////////////////*/
+    /**
+     * @notice Called continuously off-chain by Chainlink Automation nodes.
+     * @param log Events emitted by EverestConsumer when requests are fulfilled.
+     * @return upkeepNeeded Returns true if the fulfilled request is also mapped to true in s_pendingRequests.
+     * @return performData Contains the requestedAddress, status, and kycTimestamp of a request.
+     */
     function checkLog(Log calldata log, bytes memory /* checkData */ )
         external
         view
@@ -182,7 +196,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         if (log.source == address(i_consumer) && log.topics[0] == eventSignature) {
             (IEverestConsumer.Status status, uint40 kycTimestamp) =
                 abi.decode(log.data, (IEverestConsumer.Status, uint40));
-            address requestedAddress = bytes32ToAddress(log.topics[2]);
+            address requestedAddress = _bytes32ToAddress(log.topics[2]);
             if (s_pendingRequests[requestedAddress]) {
                 performData = abi.encode(requestedAddress, status, kycTimestamp);
                 upkeepNeeded = true;
@@ -194,6 +208,10 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         }
     }
 
+    /**
+     * @notice Called by Chainlink Automation services and forwards the data to fulfillCcidRequest.
+     * @param performData Contains the requestedAddress, status, and kycTimestamp of a request.
+     */
     function performUpkeep(bytes calldata performData) external onlyForwarder {
         fulfillCcidRequest(performData);
     }
@@ -201,6 +219,9 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     /*//////////////////////////////////////////////////////////////
                                 WITHDRAW
     //////////////////////////////////////////////////////////////*/
+    /**
+     * @notice Function for withdrawing LINK tokens that can only be called by the owner.
+     */
     function withdrawLink() external onlyOwner {
         uint256 balance = i_link.balanceOf(address(this));
         if (balance == 0) revert CCIDFulfill__NoLinkToWithdraw();
@@ -210,14 +231,28 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     /*//////////////////////////////////////////////////////////////
                                  SETTER
     //////////////////////////////////////////////////////////////*/
+    /**
+     * @notice CCIP best practices to prevent unwanted messages. Can only be set by the owner.
+     * @param _sourceChainSelector CCIP Chain Selector of source chain the CCIDRequest contract is on.
+     * @param _allowed Set to true to allow requests from a source chain.
+     */
     function allowlistSourceChain(uint64 _sourceChainSelector, bool _allowed) external onlyOwner {
         s_allowlistedSourceChains[_sourceChainSelector] = _allowed;
     }
 
+    /**
+     * @notice CCIP best practices to prevent unwanted messages. Can only be set by the owner.
+     * @param _sender CCIDRequest contract address
+     * @param _allowed Set to true to allow requests from CCIDRequest.
+     */
     function allowlistSender(address _sender, bool _allowed) external onlyOwner {
         s_allowlistedSenders[_sender] = _allowed;
     }
 
+    /**
+     * @notice Prevents performUpkeep from being called by unwanted actors. Can only be set by the owner.
+     * @param _forwarderAddress Chainlink Automation Forwarder contract address.
+     */
     function setForwarderAddress(address _forwarderAddress) external onlyOwner {
         s_forwarderAddress = _forwarderAddress;
     }
@@ -225,7 +260,12 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     /*//////////////////////////////////////////////////////////////
                                 UTILITY
     //////////////////////////////////////////////////////////////*/
-    function bytes32ToAddress(bytes32 _bytes) private pure returns (address) {
+    /**
+     * @notice Utility function for decoding address in event logs. This is needed to check the requestedAddress by Chainlink's
+     * off-chain Automation nodes in checkLog().
+     * @param _bytes requestedAddress in the form of bytes32
+     */
+    function _bytes32ToAddress(bytes32 _bytes) private pure returns (address) {
         return address(uint160(uint256(_bytes)));
     }
 }
