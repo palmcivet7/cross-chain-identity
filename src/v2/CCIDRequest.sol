@@ -135,6 +135,10 @@ contract CCIDRequest is Ownable, CCIPReceiver {
         emit CCIDStatusRequested(messageId, _requestedAddress, _linkAmountToSend);
     }
 
+    /**
+     * @notice Receives CCIP messages and can only be called by the CCIP Router contract.
+     * @param _message CCIP message containing requestedAddress, status, and kycTimestamp.
+     */
     function _ccipReceive(Client.Any2EVMMessage memory _message)
         internal
         override
