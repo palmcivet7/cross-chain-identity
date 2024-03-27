@@ -74,6 +74,11 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         _;
     }
 
+    modifier revertIfZeroAddress(address _address) {
+        if (_address == address(0)) revert CCIDFulfill__InvalidAddress();
+        _;
+    }
+
     /*//////////////////////////////////////////////////////////////
                               CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
@@ -96,13 +101,15 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         address _automationRegistrar,
         address _ccidRequest,
         uint64 _chainSelector
-    ) CCIPReceiver(_router) {
-        if (_router == address(0)) revert CCIDFulfill__InvalidAddress();
-        if (_link == address(0)) revert CCIDFulfill__InvalidAddress();
-        if (_consumer == address(0)) revert CCIDFulfill__InvalidAddress();
-        if (_automationConsumer == address(0)) revert CCIDFulfill__InvalidAddress();
-        if (_automationRegistrar == address(0)) revert CCIDFulfill__InvalidAddress();
-        if (_ccidRequest == address(0)) revert CCIDFulfill__InvalidAddress();
+    )
+        CCIPReceiver(_router)
+        revertIfZeroAddress(_router)
+        revertIfZeroAddress(_link)
+        revertIfZeroAddress(_consumer)
+        revertIfZeroAddress(_automationConsumer)
+        revertIfZeroAddress(_automationRegistrar)
+        revertIfZeroAddress(_ccidRequest)
+    {
         if (_chainSelector == 0) revert CCIDFulfill__InvalidChainSelector();
         i_link = LinkTokenInterface(_link);
         i_consumer = IEverestConsumer(_consumer);
