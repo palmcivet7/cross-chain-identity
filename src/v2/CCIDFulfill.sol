@@ -208,8 +208,8 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     {
         bytes32 eventSignature = keccak256("Fulfilled(bytes32,address,address,uint8,uint40)");
         if (log.source == address(i_consumer) && log.topics[0] == eventSignature) {
-            (IEverestConsumer.Status status, uint40 kycTimestamp) =
-                abi.decode(log.data, (IEverestConsumer.Status, uint40));
+            (, IEverestConsumer.Status status, uint40 kycTimestamp) =
+                abi.decode(log.data, (bytes32, IEverestConsumer.Status, uint40));
             address requestedAddress = _bytes32ToAddress(log.topics[2]);
             if (s_pendingRequests[requestedAddress]) {
                 performData = abi.encode(requestedAddress, status, kycTimestamp);
