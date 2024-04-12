@@ -282,4 +282,24 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     function _bytes32ToAddress(bytes32 _bytes) private pure returns (address) {
         return address(uint160(uint256(_bytes)));
     }
+
+    /*//////////////////////////////////////////////////////////////
+                                 GETTER
+    //////////////////////////////////////////////////////////////*/
+
+    function getLink() external view returns (LinkTokenInterface) {
+        return i_link;
+    }
+
+    function getConsumer() external view returns (IEverestConsumer) {
+        return i_consumer;
+    }
+
+    function getCcidRequest() external view returns (address) {
+        return i_ccidRequest;
+    }
+
+    function getChainSelector() external view returns (uint64) {
+        return i_chainSelector;
+    }
 }
