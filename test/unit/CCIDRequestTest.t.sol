@@ -85,7 +85,7 @@ contract CCIDRequestTest is Test, EVM2EVMOnRampSetup {
 
     function test_request_constructor_sets_values_correctly() public {
         assertEq(address(router), ccidRequest.getRouter());
-        assertEq(address(link), address(ccidRequest.i_link()));
+        assertEq(address(link), address(ccidRequest.getLink()));
     }
 
     modifier fundLinkToRevealerAndApprove() {

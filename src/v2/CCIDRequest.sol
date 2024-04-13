@@ -180,4 +180,12 @@ contract CCIDRequest is Ownable, CCIPReceiver, ICCIDRequest {
     function allowlistSender(address _sender, bool _allowed) external onlyOwner {
         s_allowlistedSenders[_sender] = _allowed;
     }
+
+    /*//////////////////////////////////////////////////////////////
+                                 GETTER
+    //////////////////////////////////////////////////////////////*/
+
+    function getLink() external view returns (LinkTokenInterface) {
+        return i_link;
+    }
 }

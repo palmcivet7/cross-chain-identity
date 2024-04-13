@@ -230,7 +230,7 @@ contract CCIDFulfillTest is Test, EVM2EVMOnRampSetup {
         router.routeMessage(message, MAX_RET_BYTES, 2000000000000, address(ccidFulfill));
         vm.stopPrank();
 
-        assertEq(ccidFulfill.s_pendingRequests(REVEALEE), true);
+        assertEq(ccidFulfill.getPendingRequest(REVEALEE), true);
     }
 
     function test_checkLog_cannot_execute() public {
@@ -278,6 +278,6 @@ contract CCIDFulfillTest is Test, EVM2EVMOnRampSetup {
         ccidFulfill.performUpkeep(performData);
         vm.stopPrank();
 
-        assertEq(ccidFulfill.s_pendingRequests(REVEALEE), false);
+        assertEq(ccidFulfill.getPendingRequest(REVEALEE), false);
     }
 }

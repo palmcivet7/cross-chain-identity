@@ -302,4 +302,8 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     function getChainSelector() external view returns (uint64) {
         return i_chainSelector;
     }
+
+    function getPendingRequest(address _revealee) external view returns (bool) {
+        return s_pendingRequests[_revealee];
+    }
 }
