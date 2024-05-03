@@ -92,7 +92,7 @@ contract CCIDFulfillTest is Test, EVM2EVMOnRampSetup {
         IPriceRegistry(address(s_priceRegistry)).updatePrices(priceUpdates);
     }
 
-    function test_constructor_sets_values_correctly() public {
+    function test_fulfill_constructor_sets_values_correctly() public {
         assertEq(address(router), ccidFulfill.getRouter());
         assertEq(address(link), address(ccidFulfill.getLink()));
         assertEq(address(everestConsumer), address(ccidFulfill.getConsumer()));

@@ -9,6 +9,7 @@ import {WETH9} from "@chainlink/contracts-ccip/src/v0.8/ccip/test/WETH9.sol";
 import {LinkToken} from "../../test/mocks/LinkToken.sol";
 import {MockEverestConsumer} from "../../test/mocks/MockEverestConsumer.sol";
 import {CCIDRequest} from "../../src/v2/CCIDRequest.sol";
+import {MockAutomationRegistrar} from "../../test/mocks/MockAutomationRegistrar.sol";
 
 contract HelperFulfillConfig is Script {
     struct NetworkConfig {
@@ -70,6 +71,7 @@ contract HelperFulfillConfig is Script {
         LinkToken mockLink = new LinkToken();
         MockEverestConsumer mockConsumer = new MockEverestConsumer();
         CCIDRequest ccidRequest = new CCIDRequest(address(router), address(mockLink));
+        MockAutomationRegistrar automationRegistrar = new MockAutomationRegistrar();
         vm.stopBroadcast();
 
         return NetworkConfig({
@@ -77,7 +79,7 @@ contract HelperFulfillConfig is Script {
             link: address(mockLink),
             consumer: address(mockConsumer),
             automationConsumer: address(0),
-            automationRegistrar: address(0),
+            automationRegistrar: address(automationRegistrar),
             ccidRequest: address(ccidRequest),
             chainSelector: SEPOLIA_CHAIN_SELECTOR,
             mockArm: address(mockArm)

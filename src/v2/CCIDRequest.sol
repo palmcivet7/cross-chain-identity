@@ -184,7 +184,6 @@ contract CCIDRequest is Ownable, CCIPReceiver, ICCIDRequest {
     /*//////////////////////////////////////////////////////////////
                                  GETTER
     //////////////////////////////////////////////////////////////*/
-
     function getLink() external view returns (LinkTokenInterface) {
         return i_link;
     }

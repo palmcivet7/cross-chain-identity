@@ -286,7 +286,6 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     /*//////////////////////////////////////////////////////////////
                                  GETTER
     //////////////////////////////////////////////////////////////*/
-
     function getLink() external view returns (LinkTokenInterface) {
         return i_link;
     }
