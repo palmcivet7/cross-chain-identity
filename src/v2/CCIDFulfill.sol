@@ -46,17 +46,17 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     /*//////////////////////////////////////////////////////////////
                                VARIABLES
     //////////////////////////////////////////////////////////////*/
-    LinkTokenInterface private immutable i_link;
-    IEverestConsumer private immutable i_consumer;
-    IAutomationRegistryConsumer private immutable i_automationConsumer;
-    address private immutable i_ccidRequest;
-    uint64 private immutable i_chainSelector;
-    uint256 private immutable i_subId;
+    LinkTokenInterface internal immutable i_link;
+    IEverestConsumer internal immutable i_consumer;
+    IAutomationRegistryConsumer internal immutable i_automationConsumer;
+    address internal immutable i_ccidRequest;
+    uint64 internal immutable i_chainSelector;
+    uint256 internal immutable i_subId;
 
-    address private s_forwarderAddress;
-    mapping(uint64 chainSelector => bool isAllowlisted) private s_allowlistedSourceChains;
-    mapping(address sender => bool isAllowlisted) private s_allowlistedSenders;
-    mapping(address => bool) private s_pendingRequests;
+    address internal s_forwarderAddress;
+    mapping(uint64 chainSelector => bool isAllowlisted) internal s_allowlistedSourceChains;
+    mapping(address sender => bool isAllowlisted) internal s_allowlistedSenders;
+    mapping(address => bool) internal s_pendingRequests;
 
     /*//////////////////////////////////////////////////////////////
                                MODIFIERS
