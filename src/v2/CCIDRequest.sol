@@ -31,11 +31,11 @@ contract CCIDRequest is Ownable, CCIPReceiver, ICCIDRequest {
     /*//////////////////////////////////////////////////////////////
                                VARIABLES
     //////////////////////////////////////////////////////////////*/
-    LinkTokenInterface private immutable i_link;
+    LinkTokenInterface internal immutable i_link;
 
-    mapping(uint64 chainSelector => bool isAllowlisted) private s_allowlistedDestinationChains;
-    mapping(uint64 chainSelector => bool isAllowlisted) private s_allowlistedSourceChains;
-    mapping(address sender => bool isAllowlisted) private s_allowlistedSenders;
+    mapping(uint64 chainSelector => bool isAllowlisted) internal s_allowlistedDestinationChains;
+    mapping(uint64 chainSelector => bool isAllowlisted) internal s_allowlistedSourceChains;
+    mapping(address sender => bool isAllowlisted) internal s_allowlistedSenders;
 
     /*//////////////////////////////////////////////////////////////
                                  EVENTS
