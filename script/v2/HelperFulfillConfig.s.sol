@@ -10,6 +10,7 @@ import {LinkToken} from "../../test/mocks/LinkToken.sol";
 import {MockEverestConsumer} from "../../test/mocks/MockEverestConsumer.sol";
 import {CCIDRequest} from "../../src/v2/CCIDRequest.sol";
 import {MockAutomationRegistrar} from "../../test/mocks/MockAutomationRegistrar.sol";
+import {MockAutomationConsumer} from "../../test/mocks/MockAutomationConsumer.sol";
 
 contract HelperFulfillConfig is Script {
     struct NetworkConfig {
@@ -72,13 +73,14 @@ contract HelperFulfillConfig is Script {
         MockEverestConsumer mockConsumer = new MockEverestConsumer();
         CCIDRequest ccidRequest = new CCIDRequest(address(router), address(mockLink));
         MockAutomationRegistrar automationRegistrar = new MockAutomationRegistrar();
+        MockAutomationConsumer automationConsumer = new MockAutomationConsumer();
         vm.stopBroadcast();
 
         return NetworkConfig({
             router: address(router),
             link: address(mockLink),
             consumer: address(mockConsumer),
-            automationConsumer: address(0),
+            automationConsumer: address(automationConsumer),
             automationRegistrar: address(automationRegistrar),
             ccidRequest: address(ccidRequest),
             chainSelector: SEPOLIA_CHAIN_SELECTOR,
