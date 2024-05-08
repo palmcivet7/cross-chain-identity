@@ -84,7 +84,8 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     //////////////////////////////////////////////////////////////*/
     /**
      * @dev This contract is registered with Chainlink Automation when it is deployed and requires the
-     *      deployer to hold LINK tokens in their wallet.
+     *      deployer to hold LINK tokens in their wallet. Constructor is payable for cheaper deployment,
+     *      but value is not intended to be sent.
      * @param _router - address of the CCIP router
      * @param _link - address of the LINK token
      * @param _consumer - address of the Everest Consumer contract
@@ -102,6 +103,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         address _ccidRequest,
         uint64 _chainSelector
     )
+        payable
         CCIPReceiver(_router)
         revertIfZeroAddress(_router)
         revertIfZeroAddress(_link)

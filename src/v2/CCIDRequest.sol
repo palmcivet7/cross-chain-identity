@@ -77,10 +77,12 @@ contract CCIDRequest is Ownable, CCIPReceiver, ICCIDRequest {
                               CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
     /**
+     * @dev Constructor is payable for cheaper deployment, but value is not intended to be sent.
      * @param _router Address of the CCIP Router contract.
      * @param _link Address of the LINK token.
      */
     constructor(address _router, address _link)
+        payable
         CCIPReceiver(_router)
         revertIfZeroAddress(_router)
         revertIfZeroAddress(_link)
