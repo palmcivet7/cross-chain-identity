@@ -47,7 +47,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
                                VARIABLES
     //////////////////////////////////////////////////////////////*/
     LinkTokenInterface internal immutable i_link;
-    IEverestConsumer internal immutable i_consumer;
+    IEverestConsumer internal immutable i_everestConsumer;
     IAutomationRegistryConsumer internal immutable i_automationConsumer;
     address internal immutable i_ccidRequest;
     uint64 internal immutable i_chainSelector;
@@ -114,7 +114,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     {
         if (_chainSelector == 0) revert CCIDFulfill__InvalidChainSelector();
         i_link = LinkTokenInterface(_link);
-        i_consumer = IEverestConsumer(_consumer);
+        i_everestConsumer = IEverestConsumer(_consumer);
         i_automationConsumer = IAutomationRegistryConsumer(_automationConsumer);
         i_ccidRequest = _ccidRequest;
         i_chainSelector = _chainSelector;
@@ -176,11 +176,11 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         onlyAllowlisted(_message.sourceChainSelector, abi.decode(_message.sender, (address)))
     {
         uint256 receivedLink = _message.destTokenAmounts[0].amount;
-        uint256 linkEverestPayment = i_consumer.oraclePayment();
+        uint256 linkEverestPayment = i_everestConsumer.oraclePayment();
         uint96 linkAutomationPayment = i_automationConsumer.getMinBalance(i_subId);
         if (receivedLink < linkEverestPayment + uint256(linkAutomationPayment)) revert CCIDFulfill__NotEnoughLinkSent();
 
-        if (!i_link.transferFrom(address(this), address(i_consumer), linkEverestPayment)) {
+        if (!i_link.transferFrom(address(this), address(i_everestConsumer), linkEverestPayment)) {
             revert CCIDFulfill__LinkTransferFailed();
         }
 
@@ -189,7 +189,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
 
         i_automationConsumer.addFunds(i_subId, linkAutomationPayment);
 
-        i_consumer.requestStatus(requestedAddress);
+        i_everestConsumer.requestStatus(requestedAddress);
 
         emit CCIDStatusRequested(requestedAddress);
     }
@@ -210,7 +210,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         returns (bool upkeepNeeded, bytes memory performData)
     {
         bytes32 eventSignature = keccak256("Fulfilled(bytes32,address,address,uint8,uint40)");
-        if (log.source == address(i_consumer) && log.topics[0] == eventSignature) {
+        if (log.source == address(i_everestConsumer) && log.topics[0] == eventSignature) {
             (, IEverestConsumer.Status status, uint40 kycTimestamp) =
                 abi.decode(log.data, (bytes32, IEverestConsumer.Status, uint40));
             address requestedAddress = _bytes32ToAddress(log.topics[2]);
@@ -294,7 +294,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     }
 
     function getConsumer() external view returns (IEverestConsumer) {
-        return i_consumer;
+        return i_everestConsumer;
     }
 
     function getCcidRequest() external view returns (address) {
