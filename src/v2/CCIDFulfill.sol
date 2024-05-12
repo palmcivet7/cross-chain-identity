@@ -180,12 +180,13 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         uint96 linkAutomationPayment = i_automationConsumer.getMinBalance(i_subId);
         if (receivedLink < linkEverestPayment + uint256(linkAutomationPayment)) revert CCIDFulfill__NotEnoughLinkSent();
 
-        (address requestedAddress) = abi.decode(_message.data, (address));
-        s_pendingRequests[requestedAddress] = true;
-
         if (!i_link.transferFrom(address(this), address(i_consumer), linkEverestPayment)) {
             revert CCIDFulfill__LinkTransferFailed();
         }
+
+        (address requestedAddress) = abi.decode(_message.data, (address));
+        s_pendingRequests[requestedAddress] = true;
+
         i_automationConsumer.addFunds(i_subId, linkAutomationPayment);
 
         i_consumer.requestStatus(requestedAddress);
