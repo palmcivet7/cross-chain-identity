@@ -95,7 +95,7 @@ contract CCIDFulfillTest is Test, EVM2EVMOnRampSetup {
     function test_fulfill_constructor_sets_values_correctly() public {
         assertEq(address(router), ccidFulfill.getRouter());
         assertEq(address(link), address(ccidFulfill.getLink()));
-        assertEq(address(everestConsumer), address(ccidFulfill.getConsumer()));
+        assertEq(address(everestConsumer), address(ccidFulfill.getEverestConsumer()));
         assertEq(address(ccidRequest), address(ccidFulfill.getCcidRequest()));
         assertEq(SEPOLIA_CHAIN_SELECTOR, ccidFulfill.getChainSelector());
     }
