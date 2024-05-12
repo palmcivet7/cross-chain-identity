@@ -293,7 +293,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         return i_link;
     }
 
-    function getConsumer() external view returns (IEverestConsumer) {
+    function getEverestConsumer() external view returns (IEverestConsumer) {
         return i_everestConsumer;
     }
 
