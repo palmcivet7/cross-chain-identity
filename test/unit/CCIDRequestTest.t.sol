@@ -16,6 +16,7 @@ import {EVM2EVMOnRampSetup} from "@chainlink/contracts-ccip/src/v0.8/ccip/test/o
 import {MockARM} from "@chainlink/contracts-ccip/src/v0.8/ccip/test/mocks/MockARM.sol";
 import {IPriceRegistry} from "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IPriceRegistry.sol";
 import {Internal} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Internal.sol";
+import {MockLinkPool} from "../mocks/MockLinkPool.sol";
 
 contract CCIDRequestTest is Test, EVM2EVMOnRampSetup {
     CCIDRequest ccidRequest;
@@ -45,6 +46,11 @@ contract CCIDRequestTest is Test, EVM2EVMOnRampSetup {
         router = Router(routerAddress);
         link = LinkToken(linkAddress);
 
+        MockLinkPool mockLinkPool = new MockLinkPool(linkAddress);
+
+        Internal.PoolUpdate[] memory adds = new Internal.PoolUpdate[](1);
+        adds[0] = Internal.PoolUpdate({token: linkAddress, pool: address(mockLinkPool)});
+
         EVM2EVMOnRampSetup.setUp();
         EVM2EVMOnRamp.FeeTokenConfigArgs[] memory feeTokenConfigArgs = new EVM2EVMOnRamp.FeeTokenConfigArgs[](1);
         feeTokenConfigArgs[0] = EVM2EVMOnRamp.FeeTokenConfigArgs({
@@ -65,7 +71,7 @@ contract CCIDRequestTest is Test, EVM2EVMOnRampSetup {
                 armProxy: address(mockArmAddress)
             }),
             generateDynamicOnRampConfig(address(router), address(s_priceRegistry)),
-            getTokensAndPools(s_sourceTokens, getCastedSourcePools()),
+            adds, // Here we're using the adds array from above
             rateLimiterConfig(),
             feeTokenConfigArgs,
             s_tokenTransferFeeConfigArgs,
