@@ -20,6 +20,7 @@ import {Internal} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Intern
 import {CCIDRequest} from "../../src/v2/CCIDRequest.sol";
 import {AutomationBase} from "@chainlink/contracts-ccip/src/v0.8/automation/AutomationBase.sol";
 import {Log} from "@chainlink/contracts-ccip/src/v0.8/automation/interfaces/ILogAutomation.sol";
+import {MockLinkPool} from "../mocks/MockLinkPool.sol";
 
 contract CCIDFulfillTest is Test, EVM2EVMOnRampSetup {
     CCIDFulfill ccidFulfill;
@@ -54,6 +55,10 @@ contract CCIDFulfillTest is Test, EVM2EVMOnRampSetup {
         everestConsumer = EverestConsumer(consumerAddress);
         ccidRequest = CCIDRequest(requestAddress);
 
+        MockLinkPool mockLinkPool = new MockLinkPool(linkAddress);
+        Internal.PoolUpdate[] memory adds = new Internal.PoolUpdate[](1);
+        adds[0] = Internal.PoolUpdate({token: linkAddress, pool: address(mockLinkPool)});
+
         EVM2EVMOnRampSetup.setUp();
         EVM2EVMOnRamp.FeeTokenConfigArgs[] memory feeTokenConfigArgs = new EVM2EVMOnRamp.FeeTokenConfigArgs[](1);
         feeTokenConfigArgs[0] = EVM2EVMOnRamp.FeeTokenConfigArgs({
@@ -74,7 +79,7 @@ contract CCIDFulfillTest is Test, EVM2EVMOnRampSetup {
                 armProxy: address(mockArmAddress)
             }),
             generateDynamicOnRampConfig(address(router), address(s_priceRegistry)),
-            getTokensAndPools(s_sourceTokens, getCastedSourcePools()),
+            adds, // getTokensAndPools(s_sourceTokens, getCastedSourcePools()),
             rateLimiterConfig(),
             feeTokenConfigArgs,
             s_tokenTransferFeeConfigArgs,
@@ -210,7 +215,7 @@ contract CCIDFulfillTest is Test, EVM2EVMOnRampSetup {
         _;
     }
 
-    function test_ccipReceive_works() public approveSourceChain approveSourceSender {
+    function test_fulfill_ccipReceive_works() public approveSourceChain approveSourceSender {
         vm.startPrank(msg.sender);
         Router.OffRamp memory newOffRamp =
             Router.OffRamp({sourceChainSelector: SEPOLIA_CHAIN_SELECTOR, offRamp: msg.sender});
