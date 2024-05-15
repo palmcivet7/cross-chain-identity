@@ -119,6 +119,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         i_ccidRequest = _ccidRequest;
         i_chainSelector = _chainSelector;
         i_link.approve(address(i_router), type(uint256).max);
+        i_link.approve(address(i_everestConsumer), type(uint256).max);
 
         RegistrationParams memory params = RegistrationParams({
             name: "",

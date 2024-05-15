@@ -37,4 +37,16 @@ contract MockEverestConsumer {
         if (_status == IEverestConsumer.Status.KYCUser) preSetKycTimestamp[_revealee] = uint40(block.timestamp);
         preSetKycTimestamp[_revealee] = 0;
     }
+
+    /////////////////////////
+
+    uint256 private s_oraclePayment = 1e17;
+
+    function oraclePayment() external view returns (uint256 price) {
+        return s_oraclePayment;
+    }
+
+    function setOraclePayment(uint256 _oraclePayment) external {
+        s_oraclePayment = _oraclePayment;
+    }
 }
