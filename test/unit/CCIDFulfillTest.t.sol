@@ -215,7 +215,12 @@ contract CCIDFulfillTest is Test, EVM2EVMOnRampSetup {
         _;
     }
 
-    function test_fulfill_ccipReceive_works() public approveSourceChain approveSourceSender {
+    function test_fulfill_ccipReceive_works()
+        public
+        approveSourceChain
+        approveSourceSender
+        fundCcidFulfillAndApproveRouter
+    {
         vm.startPrank(msg.sender);
         Router.OffRamp memory newOffRamp =
             Router.OffRamp({sourceChainSelector: SEPOLIA_CHAIN_SELECTOR, offRamp: msg.sender});
@@ -224,12 +229,15 @@ contract CCIDFulfillTest is Test, EVM2EVMOnRampSetup {
 
         router.applyRampUpdates(new Router.OnRamp[](0), new Router.OffRamp[](0), newOffRampArray);
 
+        Client.EVMTokenAmount[] memory tokenAmounts = new Client.EVMTokenAmount[](1);
+        tokenAmounts[0] = Client.EVMTokenAmount({amount: 1000000000000000000, token: address(link)});
+
         Client.Any2EVMMessage memory message = Client.Any2EVMMessage({
             messageId: keccak256(abi.encodePacked("testMessageId")),
             sourceChainSelector: SEPOLIA_CHAIN_SELECTOR,
             sender: abi.encode(address(ccidRequest)),
             data: abi.encode(REVEALEE, IEverestConsumer.Status.HumanAndUnique, 0),
-            destTokenAmounts: new Client.EVMTokenAmount[](0)
+            destTokenAmounts: tokenAmounts
         });
 
         router.routeMessage(message, MAX_RET_BYTES, 2000000000000, address(ccidFulfill));
