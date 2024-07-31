@@ -69,11 +69,6 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         _;
     }
 
-    modifier onlyForwarder() {
-        if (msg.sender != s_forwarderAddress) revert CCIDFulfill__OnlyForwarder();
-        _;
-    }
-
     modifier revertIfZeroAddress(address _address) {
         if (_address == address(0)) revert CCIDFulfill__InvalidAddress();
         _;
@@ -228,7 +223,8 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
      * @notice Called by Chainlink Automation services and forwards the data to fulfillCcidRequest.
      * @param performData Contains the requestedAddress, status, and kycTimestamp of a request.
      */
-    function performUpkeep(bytes calldata performData) external onlyForwarder {
+    function performUpkeep(bytes calldata performData) external {
+        if (msg.sender != s_forwarderAddress) revert CCIDFulfill__OnlyForwarder();
         fulfillCcidRequest(performData);
     }
 
