@@ -42,6 +42,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     event CCIDStatusFulfilled(
         address indexed requestedAddress, IEverestConsumer.Status indexed status, uint40 indexed kycTimestamp
     );
+    event ForwarderContractSet(address forwarder);
 
     /*//////////////////////////////////////////////////////////////
                                VARIABLES
@@ -267,6 +268,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
      */
     function setForwarderAddress(address _forwarderAddress) external onlyOwner {
         s_forwarderAddress = _forwarderAddress;
+        emit ForwarderContractSet(_forwarderAddress);
     }
 
     /*//////////////////////////////////////////////////////////////
