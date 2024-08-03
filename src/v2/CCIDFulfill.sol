@@ -36,16 +36,6 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     error CCIDFulfill__NotEnoughLinkSent();
 
     /*//////////////////////////////////////////////////////////////
-                                 EVENTS
-    //////////////////////////////////////////////////////////////*/
-    event CCIDStatusRequested(address indexed requestedAddress);
-    event CCIDStatusFulfilled(
-        address indexed requestedAddress, IEverestConsumer.Status indexed status, uint40 indexed kycTimestamp
-    );
-    event AllowlistedSenderUpdated(address sender, bool allowed);
-    event ForwarderContractSet(address forwarder);
-
-    /*//////////////////////////////////////////////////////////////
                                VARIABLES
     //////////////////////////////////////////////////////////////*/
     LinkTokenInterface internal immutable i_link;
@@ -59,6 +49,17 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     mapping(uint64 chainSelector => bool isAllowlisted) internal s_allowlistedSourceChains;
     mapping(address sender => bool isAllowlisted) internal s_allowlistedSenders;
     mapping(address => bool) internal s_pendingRequests;
+
+    /*//////////////////////////////////////////////////////////////
+                                 EVENTS
+    //////////////////////////////////////////////////////////////*/
+    event CCIDStatusRequested(address indexed requestedAddress);
+    event CCIDStatusFulfilled(
+        address indexed requestedAddress, IEverestConsumer.Status indexed status, uint40 indexed kycTimestamp
+    );
+    event AllowlistedSenderUpdated(address sender, bool allowed);
+    event AllowlistedSourceChainUpdated(uint64 sourceChainSelector, bool allowed);
+    event ForwarderContractSet(address forwarder);
 
     /*//////////////////////////////////////////////////////////////
                                MODIFIERS
@@ -252,6 +253,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
      */
     function allowlistSourceChain(uint64 _sourceChainSelector, bool _allowed) external onlyOwner {
         s_allowlistedSourceChains[_sourceChainSelector] = _allowed;
+        emit AllowlistedSourceChainUpdated(_sourceChainSelector, _allowed);
     }
 
     /**
