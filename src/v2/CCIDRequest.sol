@@ -44,6 +44,7 @@ contract CCIDRequest is Ownable, CCIPReceiver, ICCIDRequest {
     event CCIDStatusReceived(
         address indexed requestedAddress, IEverestConsumer.Status indexed status, uint40 indexed kycTimestamp
     );
+    event CCIDRequest__AllowlistedSourceChainUpdated(uint64 sourceChainSelector, bool allowed);
 
     /*//////////////////////////////////////////////////////////////
                                MODIFIERS
@@ -172,6 +173,7 @@ contract CCIDRequest is Ownable, CCIPReceiver, ICCIDRequest {
      */
     function allowlistSourceChain(uint64 _sourceChainSelector, bool _allowed) external onlyOwner {
         s_allowlistedSourceChains[_sourceChainSelector] = _allowed;
+        emit CCIDRequest__AllowlistedSourceChainUpdated(_sourceChainSelector, _allowed);
     }
 
     /**
