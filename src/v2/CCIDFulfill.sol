@@ -58,7 +58,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
         address indexed requestedAddress, IEverestConsumer.Status indexed status, uint40 indexed kycTimestamp
     );
     event AllowlistedSenderUpdated(address sender, bool allowed);
-    event AllowlistedSourceChainUpdated(uint64 sourceChainSelector, bool allowed);
+    event CCIDFulfill__AllowlistedSourceChainUpdated(uint64 sourceChainSelector, bool allowed);
     event ForwarderContractSet(address forwarder);
 
     /*//////////////////////////////////////////////////////////////
@@ -253,7 +253,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
      */
     function allowlistSourceChain(uint64 _sourceChainSelector, bool _allowed) external onlyOwner {
         s_allowlistedSourceChains[_sourceChainSelector] = _allowed;
-        emit AllowlistedSourceChainUpdated(_sourceChainSelector, _allowed);
+        emit CCIDFulfill__AllowlistedSourceChainUpdated(_sourceChainSelector, _allowed);
     }
 
     /**
