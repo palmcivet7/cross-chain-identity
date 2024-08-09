@@ -59,7 +59,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
     );
     event CCIDFulfill__AllowlistedSenderUpdated(address sender, bool allowed);
     event CCIDFulfill__AllowlistedSourceChainUpdated(uint64 sourceChainSelector, bool allowed);
-    event ForwarderContractSet(address forwarder);
+    event CCIDFulfill__ForwarderContractSet(address forwarder);
 
     /*//////////////////////////////////////////////////////////////
                                MODIFIERS
@@ -272,7 +272,7 @@ contract CCIDFulfill is Ownable, AutomationBase, CCIPReceiver {
      */
     function setForwarderAddress(address _forwarderAddress) external onlyOwner {
         s_forwarderAddress = _forwarderAddress;
-        emit ForwarderContractSet(_forwarderAddress);
+        emit CCIDFulfill__ForwarderContractSet(_forwarderAddress);
     }
 
     /*//////////////////////////////////////////////////////////////
