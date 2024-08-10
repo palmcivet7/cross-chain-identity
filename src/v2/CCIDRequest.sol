@@ -44,6 +44,7 @@ contract CCIDRequest is Ownable, CCIPReceiver, ICCIDRequest {
     event CCIDStatusReceived(
         address indexed requestedAddress, IEverestConsumer.Status indexed status, uint40 indexed kycTimestamp
     );
+    event CCIDRequest__AllowlistedDestinationChainUpdated(uint64 destinationChainSelector, bool allowed);
     event CCIDRequest__AllowlistedSourceChainUpdated(uint64 sourceChainSelector, bool allowed);
 
     /*//////////////////////////////////////////////////////////////
@@ -164,6 +165,7 @@ contract CCIDRequest is Ownable, CCIPReceiver, ICCIDRequest {
      */
     function allowlistDestinationChain(uint64 _destinationChainSelector, bool _allowed) external onlyOwner {
         s_allowlistedDestinationChains[_destinationChainSelector] = _allowed;
+        emit CCIDRequest__AllowlistedDestinationChainUpdated(_destinationChainSelector, _allowed);
     }
 
     /**
