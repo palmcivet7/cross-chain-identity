@@ -90,7 +90,6 @@ contract CCIDRequest is Ownable, CCIPReceiver, ICCIDRequest {
         revertIfZeroAddress(_link)
     {
         i_link = LinkTokenInterface(_link);
-        i_link.approve(address(i_router), type(uint256).max);
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -133,6 +132,8 @@ contract CCIDRequest is Ownable, CCIPReceiver, ICCIDRequest {
 
         uint256 fees = IRouterClient(i_router).getFee(_chainSelector, message);
         uint256 linkToPay = fees + _linkAmountToSend;
+
+        i_link.approve(address(i_router), linkToPay);
 
         if (!i_link.transferFrom(msg.sender, address(this), linkToPay)) revert CCIDRequest__LinkTransferFailed();
         messageId = IRouterClient(i_router).ccipSend(_chainSelector, message);
